@@ -153,3 +153,29 @@ class SecuritySerializer(serializers.ModelSerializer):
         security = apiModels.Security.objects.create(**validated_data)
         return security
 
+class PortfolioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = apiModels.Portfolio
+        fields = [
+            'name'
+        ]
+
+class ReadAccountSerializer(serializers.ModelSerializer):
+    portfolio = PortfolioSerializer()
+    class Meta:
+        model = apiModels.Account
+        fields = [
+            'name',
+            'portfolio'
+        ]
+    
+class AccountSerializer(serializers.ModelSerializer):
+    portfolio = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.Account.objects.all()
+    )
+    class Meta:
+        model = apiModels.Account
+        fields = [
+            'name',
+            'portfolio'
+        ]

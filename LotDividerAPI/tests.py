@@ -136,11 +136,14 @@ class ProjectTestCase(test.APITestCase):
         data = {
             'name': 'testProject2',
             'owners': [
-                3,
+                5,
             ],
         }
         self.client.login(email='test@test.com', password='test1234')
         response = self.client.post(url, data, format='json')
+        for person in get_user_model().objects.all():
+            print(person.id)
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_listProjects(self):
@@ -213,7 +216,7 @@ class ProductTypeTestCase(test.APITestCase):
         response = self.client.patch(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         print(response.content)
-
+    
 class SecurityTestCase(test.APITestCase):
     @classmethod
     def setUpTestData(self):
@@ -301,3 +304,65 @@ class SecurityTestCase(test.APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.data['cusip'],'bookface')
     
+class PortfolioTestCase(test.APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        pwHash = make_password('test1234')
+        user = get_user_model().objects.create(
+            name =  'Alex',
+            email = 'test@test.com',
+            alias = 'ac',
+            password = pwHash,
+        )
+        user.save()
+    
+    def test_createPortfolio(self):
+        url = ('http://localhost:8000/api/portfolios/')
+        data = {
+            'name': 'testPortfolio',
+        }
+        # self.client.login(email='test@test.com', password='test1234')
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_listPortfolios(self):
+        url = ('http://localhost:8000/api/portfolios/')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+class AccountTestCase(test.APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        pwHash = make_password('test1234')
+        user = get_user_model().objects.create(
+            name =  'Alex',
+            email = 'test@test.com',
+            alias = 'ac',
+            password = pwHash,
+        )
+        user.save()
+    
+        apiModels.Portfolio.objects.create(
+            name='testPortfolio',
+        )
+
+    def test_createAccount(self):
+        url = ('http://localhost:8000/api/accounts/')
+        data = {
+            'name': 'testAccount',
+            'portfolio': 1,
+        }
+        print(apiModels.Portfolio.objects.all())
+        response = self.client.post(url, data, format='json')
+        for a in apiModels.Portfolio.objects.all():
+            print(a.id)
+        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_listAccounts(self):
+        url = ('http://localhost:8000/api/accounts/')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+        print(response.data)

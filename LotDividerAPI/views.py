@@ -44,4 +44,15 @@ class SecurityViewSet(viewsets.ModelViewSet):
             return serializers.ReadSecuritySerializer
         return serializers.SecuritySerializer    
     
+class PortfolioViewSet(viewsets.ModelViewSet):
+    queryset = apiModels.Portfolio.objects.all()
+    serializer_class = serializers.PortfolioSerializer
 
+class AccountViewSet(viewsets.ModelViewSet):
+    queryset = apiModels.Account.objects.all()
+    serializer_class = serializers.AccountSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.ReadAccountSerializer
+        return serializers.AccountSerializer

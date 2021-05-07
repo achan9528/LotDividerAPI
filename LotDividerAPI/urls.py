@@ -6,6 +6,8 @@ router = routers.DefaultRouter()
 router.register(r'securities', views.SecurityViewSet)
 router.register(r'projects', views.ProjectViewSet)
 router.register(r'products', views.ProductTypesViewSet)
+router.register(r'portfolios', views.PortfolioViewSet)
+router.register(r'accounts', views.AccountViewSet)
 
 urlpatterns = [
     path('api/welcome/', views.TestView.as_view()),
