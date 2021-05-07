@@ -68,7 +68,7 @@ class Portfolio(models.Model):
     # taxLots
 
     def __str__(self):
-        return (f"Portfolio Name: {self.name}, Portfolio Number: {self.number}")
+        return (f"Portfolio Name: {self.name}, Portfolio Number: {self.number}, ID: {self.id}")
 
 class Account(models.Model):
     name = models.CharField(max_length=50)
@@ -82,59 +82,56 @@ class Account(models.Model):
     def __str__(self):
         return (f"Account Name {self.name}, Account Number: {self.number}")
 
-
-
-
-# class Holding(models.Model):
-#     security = models.ForeignKey(Security, related_name="relatedHoldings", on_delete=models.CASCADE)
-#     account = models.ForeignKey(Account, related_name="holdings", on_delete=models.CASCADE)
-#     number = models.CharField(max_length=50, default=uuid.uuid4)
+class Holding(models.Model):
+    security = models.ForeignKey(Security, related_name="relatedHoldings", on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, related_name="holdings", on_delete=models.CASCADE)
+    number = models.CharField(max_length=50, default=uuid.uuid4)
     
-#     #taxLots = tax lots associated with the holding
+    #taxLots = tax lots associated with the holding
 
-#     def __str__(self):
-#         return (f"Holding: {self.security.name}, Account Name: {self.account.name}")
+    def __str__(self):
+        return (f"Holding: {self.security.name}, Account Name: {self.account.name}, ID: {self.id}")
 
-# class TaxLot(models.Model):
-#     number = models.CharField(max_length=50, default=uuid.uuid4)
-#     holding = models.ForeignKey(Holding, related_name="taxLots", on_delete=models.CASCADE)
-#     units = models.DecimalField(max_digits=20, decimal_places=4)
-#     totalFederalCost = models.DecimalField(max_digits=20, decimal_places=2)
-#     totalStateCost = models.DecimalField(max_digits=20, decimal_places=2)
-#     acquisitionDate = models.DateTimeField(auto_now_add=True)
-#     createdAt = models.DateTimeField(auto_now_add=True)
-#     updatedAt = models.DateTimeField(auto_now=True)
+class TaxLot(models.Model):
+    number = models.CharField(max_length=50, default=uuid.uuid4)
+    holding = models.ForeignKey(Holding, related_name="taxLots", on_delete=models.CASCADE)
+    units = models.DecimalField(max_digits=20, decimal_places=4)
+    totalFederalCost = models.DecimalField(max_digits=20, decimal_places=2)
+    totalStateCost = models.DecimalField(max_digits=20, decimal_places=2)
+    acquisitionDate = models.DateTimeField(auto_now_add=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
-#     # portfolio = models.ForeignKey(Portfolio, related_name="lots", on_delete=models.CASCADE)
-#     # productType = models.ForeignKey(ProductType, related_name="lotsAssociated", on_delete=models.CASCADE)
+    # portfolio = models.ForeignKey(Portfolio, related_name="lots", on_delete=models.CASCADE)
+    # productType = models.ForeignKey(ProductType, related_name="lotsAssociated", on_delete=models.CASCADE)
 
-#     def __str__(self):
-#         return (f"Lot Number: {self.number}, Ticker: {self.holding.security.ticker}, Units: {self.units}, Cost: {self.totalFederalCost}")
+    def __str__(self):
+        return (f"Lot Number: {self.number}, Ticker: {self.holding.security.ticker}, Units: {self.units}, Cost: {self.totalFederalCost}")
 
-# class Proposal(models.Model):
-#     name = models.CharField(max_length=50, blank=True, default="")
-#     number = models.CharField(max_length=50, default=uuid.uuid4)
-#     createdAt = models.DateTimeField(auto_now_add=True)
-#     updatedAt = models.DateTimeField(auto_now=True)
-#     project = models.ForeignKey(Project, related_name="proposals", on_delete=models.CASCADE)
+class Proposal(models.Model):
+    name = models.CharField(max_length=50, blank=True, default="")
+    number = models.CharField(max_length=50, default=uuid.uuid4)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+    project = models.ForeignKey(Project, related_name="proposals", on_delete=models.CASCADE)
     
-#     # accounts
-#     # draft portfolios
+    # accounts
+    # draft portfolios
 
-#     def __str__(self):
-#         return (f"Proposal Name: {self.name}, Proposal Number: {self.number}")
+    def __str__(self):
+        return (f"Proposal Name: {self.name}, Proposal Number: {self.number}")
 
-# class DraftPortfolio(models.Model):
-#     name = models.CharField(max_length=50, blank=True, default="")
-#     number = models.CharField(max_length=50, default=uuid.uuid4)
-#     createdAt = models.DateTimeField(auto_now_add=True)
-#     updatedAt = models.DateTimeField(auto_now=True)
-#     proposal = models.ForeignKey(Proposal, related_name="draftPortfolios", on_delete=models.CASCADE)
-#     # project = models.ForeignKey(Project, related_name="draftPortfolios", on_delete=models.CASCADE)
-#     # accounts
+class DraftPortfolio(models.Model):
+    name = models.CharField(max_length=50, blank=True, default="")
+    number = models.CharField(max_length=50, default=uuid.uuid4)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+    proposal = models.ForeignKey(Proposal, related_name="draftPortfolios", on_delete=models.CASCADE)
+    # project = models.ForeignKey(Project, related_name="draftPortfolios", on_delete=models.CASCADE)
+    # accounts
 
-#     def __str__(self):
-#         return (f"Draft Portfolio Name: {self.name}, Draft Portfolio Number: {self.number}")
+    def __str__(self):
+        return (f"Draft Portfolio Name: {self.name}, Draft Portfolio Number: {self.number}")
 
 # class DraftAccount(models.Model):
 #     name = models.CharField(max_length=50, blank=True, default="")

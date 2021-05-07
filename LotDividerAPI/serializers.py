@@ -87,7 +87,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class ReadProjectSerializer(serializers.ModelSerializer):
-    owners = UserDetailsSerializer()
+    owners = UserDetailsSerializer() # from rest_auth
     class Meta: 
         model = User
         fields = [
@@ -149,10 +149,6 @@ class SecuritySerializer(serializers.ModelSerializer):
             'productType',
         ]
 
-    def create(self, validated_data):
-        security = apiModels.Security.objects.create(**validated_data)
-        return security
-
 class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = apiModels.Portfolio
@@ -171,7 +167,7 @@ class ReadAccountSerializer(serializers.ModelSerializer):
     
 class AccountSerializer(serializers.ModelSerializer):
     portfolio = serializers.PrimaryKeyRelatedField(
-        queryset = apiModels.Account.objects.all()
+        queryset = apiModels.Portfolio.objects.all(),
     )
     class Meta:
         model = apiModels.Account
@@ -179,3 +175,113 @@ class AccountSerializer(serializers.ModelSerializer):
             'name',
             'portfolio'
         ]
+
+class ReadHoldingSerializer(serializers.ModelSerializer):
+    account = ReadAccountSerializer()
+    class Meta:
+        model = apiModels.Holding
+        fields = [
+            'account',
+            'security'
+        ]
+        depth = 2
+    
+class HoldingSerializer(serializers.ModelSerializer):
+    account = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.Account.objects.all()
+    )
+    security = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.Security.objects.all()
+    )
+    class Meta:
+        model = apiModels.Holding
+        fields = [
+            'account',
+            'security'
+        ]
+        depth = 2
+
+    # def create(self, validated_data):
+    #     # securityID = validated_data.pop('security')
+    #     # accountID = validated_data.pop('account')
+    #     holding = apiModels.Holding.objects.create(
+    #         **validated_data
+    #     )
+    #     return holding
+
+class ReadTaxLotSerializer(serializers.ModelSerializer):
+    holding = ReadHoldingSerializer()
+    class Meta:
+        model = apiModels.TaxLot
+        fields = [
+            'number',
+            'holding',
+            'units',
+            'totalFederalCost',
+            'totalStateCost',
+            'acquisitionDate',
+        ]
+        depth = 2
+    
+class TaxLotSerializer(serializers.ModelSerializer):
+    holding = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.Holding.objects.all()
+    )
+    class Meta:
+        model = apiModels.TaxLot
+        fields = [
+            'number',
+            'holding',
+            'units',
+            'totalFederalCost',
+            'totalStateCost',
+            'acquisitionDate',
+        ]
+        depth = 2
+
+class ReadProposalSerializer(serializers.ModelSerializer):
+    project = ReadProjectSerializer()
+    class Meta:
+        model = apiModels.Proposal
+        fields = [
+            'name',
+            'project'
+        ]
+        depth = 2
+
+class ProposalSerializer(serializers.ModelSerializer):
+    project = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.Project.objects.all()
+    )
+
+    class Meta:
+        model = apiModels.Proposal
+        fields = [
+            'name',
+            'project',
+        ]
+        depth = 2
+
+class ReadDraftPortfolioSerializer(serializers.ModelSerializer):
+    proposal = PortfolioSerializer()
+    class Meta:
+        model = apiModels.DraftPortfolio
+        fields = [
+            'name',
+            'proposal'
+        ]
+        depth = 2
+
+class DraftPortfolioSerializer(serializers.ModelSerializer):
+    proposal = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.Proposal.objects.all()
+    )
+
+    class Meta:
+        model = apiModels.DraftPortfolio
+        fields = [
+            'name',
+            'proposal',
+        ]
+        depth = 2
+

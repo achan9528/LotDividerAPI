@@ -8,6 +8,10 @@ router.register(r'projects', views.ProjectViewSet)
 router.register(r'products', views.ProductTypesViewSet)
 router.register(r'portfolios', views.PortfolioViewSet)
 router.register(r'accounts', views.AccountViewSet)
+router.register(r'holdings', views.HoldingViewSet)
+router.register(r'tax-lots', views.TaxLotViewSet)
+router.register(r'proposals', views.ProposalViewSet)
+router.register(r'draft-portfolios', views.DraftPortfolioViewSet)
 
 urlpatterns = [
     path('api/welcome/', views.TestView.as_view()),
