@@ -102,7 +102,7 @@ class DraftAccountViewSet(viewsets.ModelViewSet):
             return serializers.ReadDraftAccountSerializer
         return serializers.DraftAccountSerializer
 
-class DraftHoldingsViewSet(viewsets.ModelViewSet):
+class DraftHoldingViewSet(viewsets.ModelViewSet):
     queryset = apiModels.DraftHolding.objects.all()
     serializer_class = serializers.DraftHoldingSerializer
     
@@ -110,3 +110,12 @@ class DraftHoldingsViewSet(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             return serializers.ReadDraftHoldingSerializer
         return serializers.DraftHoldingSerializer
+
+class DraftTaxLotViewSet(viewsets.ModelViewSet):
+    queryset = apiModels.DraftTaxLot.objects.all()
+    serializer_class = serializers.DraftTaxLotSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.ReadDraftTaxLotSerializer
+        return serializers.DraftTaxLotSerializer

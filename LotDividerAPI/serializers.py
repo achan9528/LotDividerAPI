@@ -334,3 +334,33 @@ class DraftHoldingSerializer(serializers.ModelSerializer):
             'draftAccount',
         ]
         depth = 2
+
+class ReadDraftTaxLotSerializer(serializers.ModelSerializer):
+    draftHolding = ReadDraftHoldingSerializer()
+    referencedLot = ReadTaxLotSerializer()
+    class Meta:
+        model = apiModels.DraftTaxLot
+        fields = [
+            'draftHolding',
+            'units',
+            'referencedLot',
+        ]
+        depth = 2
+
+class DraftTaxLotSerializer(serializers.ModelSerializer):
+    draftHolding = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.DraftHolding.objects.all()
+    )
+    referencedLot = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.TaxLot.objects.all()
+    )
+
+    class Meta:
+        model = apiModels.DraftTaxLot
+        fields = [
+            'draftHolding',
+            'units',
+            'referencedLot',
+        ]
+        depth = 2
+

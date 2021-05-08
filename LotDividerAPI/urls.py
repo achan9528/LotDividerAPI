@@ -13,7 +13,8 @@ router.register(r'tax-lots', views.TaxLotViewSet)
 router.register(r'proposals', views.ProposalViewSet)
 router.register(r'draft-portfolios', views.DraftPortfolioViewSet)
 router.register(r'draft-accounts', views.DraftAccountViewSet)
-router.register(r'draft-holdings', views.DraftHoldingsViewSet)
+router.register(r'draft-holdings', views.DraftHoldingViewSet)
+router.register(r'draft-taxlots', views.DraftTaxLotViewSet)
 
 urlpatterns = [
     path('api/welcome/', views.TestView.as_view()),

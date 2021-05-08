@@ -154,17 +154,17 @@ class DraftHolding(models.Model):
     def __str__(self):
         return (f"Draft Holding: {self.security.name}, Draft Account Name: {self.draftAccount.name}")
 
-# class DraftTaxLot(models.Model):
-#     number = models.CharField(max_length=50, default=uuid.uuid4)
-#     draftHolding = models.ForeignKey(DraftHolding, related_name="draftTaxLots", on_delete=models.CASCADE)
-#     units = models.DecimalField(max_digits=20, decimal_places=4)
-#     referencedLot = models.ForeignKey(TaxLot, related_name="draftTaxLotsRelated", on_delete=models.CASCADE)
-#     createdAt = models.DateTimeField(auto_now_add=True)
-#     updatedAt = models.DateTimeField(auto_now=True)
+class DraftTaxLot(models.Model):
+    number = models.CharField(max_length=50, default=uuid.uuid4)
+    draftHolding = models.ForeignKey(DraftHolding, related_name="draftTaxLots", on_delete=models.CASCADE)
+    units = models.DecimalField(max_digits=20, decimal_places=4)
+    referencedLot = models.ForeignKey(TaxLot, related_name="draftTaxLotsRelated", on_delete=models.CASCADE)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
-#     # portfolio = models.ForeignKey(Portfolio, related_name="lots", on_delete=models.CASCADE)
-#     # productType = models.ForeignKey(ProductType, related_name="lotsAssociated", on_delete=models.CASCADE)
+    # portfolio = models.ForeignKey(Portfolio, related_name="lots", on_delete=models.CASCADE)
+    # productType = models.ForeignKey(ProductType, related_name="lotsAssociated", on_delete=models.CASCADE)
 
-#     def __str__(self):
-#         return (f"Draft Lot Number: {self.number}, Ticker: {self.draftHolding.security.ticker}, Units: {self.units}")
+    def __str__(self):
+        return (f"Draft Lot Number: {self.number}, Ticker: {self.draftHolding.security.ticker}, Units: {self.units}")
 
