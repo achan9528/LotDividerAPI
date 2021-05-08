@@ -824,3 +824,277 @@ class DraftPortfolioTestCase(test.APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(len(apiModels.DraftPortfolio.objects.all()), 0)
+
+class DraftAccountTestCase(test.APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        pwHash = make_password('test1234')
+        cls.u1 = get_user_model().objects.create(
+            name =  'Alex',
+            email = 'test@test.com',
+            alias = 'ac',
+            password = pwHash,
+        )
+        
+        cls.pt1 = apiModels.ProductType.objects.create(
+            name='stock',
+        )
+
+        cls.pt2 = apiModels.ProductType.objects.create(
+            name='mutual fund',
+            fractionalLotsAllowed = True
+        )
+
+        cls.s1 = apiModels.Security.objects.create(
+            ticker='AMC',
+            cusip='AMC',
+            name='AMC',
+            productType=apiModels.ProductType.objects.get(name='stock'),
+        )
+
+        cls.s2 = apiModels.Security.objects.create(
+            ticker='VBINX',
+            cusip='VBINX',
+            name='VBINX',
+            productType=apiModels.ProductType.objects.get(name='mutual fund'),
+        )
+
+        cls.p1 = apiModels.Portfolio.objects.create(
+            name='testPortfolio',
+        )
+
+        cls.a1 = apiModels.Account.objects.create(
+            name='testAccount',
+            portfolio=apiModels.Portfolio.objects.first(),
+        )
+
+        cls.a2 = apiModels.Account.objects.create(
+            name='testAccount2',
+            portfolio=apiModels.Portfolio.objects.first(),
+        )
+
+        cls.h1 = apiModels.Holding.objects.create(
+            account=cls.a1,
+            security=cls.s1
+        )
+
+        cls.h2 = apiModels.Holding.objects.create(
+            account=cls.a2,
+            security=cls.s2
+        )
+
+        cls.tl1 = apiModels.TaxLot.objects.create(
+            holding = cls.h1,
+            units = 10,
+            totalFederalCost = 10,
+            totalStateCost = 10,
+            acquisitionDate = date.today()
+        )
+
+        cls.pj1 = apiModels.Project.objects.create(
+            name='test project',
+        )
+        cls.pj1.owners.add(cls.u1)
+        cls.pj1.save()
+
+        cls.pp1 = apiModels.Proposal.objects.create(
+            name = 'test proposal',
+            project = cls.pj1
+        )
+
+
+        cls.dp1 = apiModels.DraftPortfolio.objects.create(
+            name= 'testDraftPortfolio',
+            proposal= cls.pp1,
+        )
+
+        cls.da1 = apiModels.DraftAccount.objects.create(
+            name = 'test draft account',
+            draftPortfolio = cls.dp1,
+        )
+    
+    def test_createDraftAccount(self):
+        url = ('http://localhost:8000/api/draft-accounts/')
+        data = {
+            'name': 'test draft Portfolio',
+            'draftPortfolio': self.dp1.id,
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_listDraftAccounts(self):
+        url = ('http://localhost:8000/api/draft-accounts/')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_patchDraftAccount1(self):
+        url = ('http://localhost:8000/api/draft-accounts/1/')
+        data = {
+            'name': 'another name!'
+        }
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['name'], 'another name!')
+
+    def test_putDraftAccount1(self):
+        url = ('http://localhost:8000/api/draft-accounts/1/')
+        data = {
+            'name': 'put route test',
+            'draftPortfolio': self.dp1.id,
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['name'], 'put route test')
+
+    def test_deleteDraftAccount1(self):
+        url = ('http://localhost:8000/api/draft-accounts/1/')
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(apiModels.DraftAccount.objects.all()), 0)
+
+class DraftHoldingTestCase(test.APITestCase):
+    @classmethod
+    def setUpTestData(cls):
+        pwHash = make_password('test1234')
+        cls.u1 = get_user_model().objects.create(
+            name =  'Alex',
+            email = 'test@test.com',
+            alias = 'ac',
+            password = pwHash,
+        )
+        
+        cls.pt1 = apiModels.ProductType.objects.create(
+            name='stock',
+        )
+
+        cls.pt2 = apiModels.ProductType.objects.create(
+            name='mutual fund',
+            fractionalLotsAllowed = True
+        )
+
+        cls.s1 = apiModels.Security.objects.create(
+            ticker='AMC',
+            cusip='AMC',
+            name='AMC',
+            productType=apiModels.ProductType.objects.get(name='stock'),
+        )
+
+        cls.s2 = apiModels.Security.objects.create(
+            ticker='VBINX',
+            cusip='VBINX',
+            name='VBINX',
+            productType=apiModels.ProductType.objects.get(name='mutual fund'),
+        )
+
+        cls.p1 = apiModels.Portfolio.objects.create(
+            name='testPortfolio',
+        )
+
+        cls.a1 = apiModels.Account.objects.create(
+            name='testAccount',
+            portfolio=apiModels.Portfolio.objects.first(),
+        )
+
+        cls.a2 = apiModels.Account.objects.create(
+            name='testAccount2',
+            portfolio=apiModels.Portfolio.objects.first(),
+        )
+
+        cls.h1 = apiModels.Holding.objects.create(
+            account=cls.a1,
+            security=cls.s1
+        )
+
+        cls.h2 = apiModels.Holding.objects.create(
+            account=cls.a2,
+            security=cls.s2
+        )
+
+        cls.tl1 = apiModels.TaxLot.objects.create(
+            holding = cls.h1,
+            units = 10,
+            totalFederalCost = 10,
+            totalStateCost = 10,
+            acquisitionDate = date.today()
+        )
+
+        cls.pj1 = apiModels.Project.objects.create(
+            name='test project',
+        )
+        cls.pj1.owners.add(cls.u1)
+        cls.pj1.save()
+
+        cls.pp1 = apiModels.Proposal.objects.create(
+            name = 'test proposal',
+            project = cls.pj1
+        )
+
+
+        cls.dp1 = apiModels.DraftPortfolio.objects.create(
+            name= 'testDraftPortfolio',
+            proposal= cls.pp1,
+        )
+        
+        cls.dp2 = apiModels.DraftPortfolio.objects.create(
+            name= 'test draft portfolio 2',
+            proposal= cls.pp1,
+        )
+
+        cls.da1 = apiModels.DraftAccount.objects.create(
+            name = 'test draft account',
+            draftPortfolio = cls.dp1,
+        )
+
+        cls.da2 = apiModels.DraftAccount.objects.create(
+            name = 'test draft account 2',
+            draftPortfolio = cls.dp1,
+        )
+
+        cls.dh1 = apiModels.DraftHolding.objects.create(
+            security = cls.s1,
+            draftAccount = cls.da1,
+        )
+    
+    def test_createDraftHolding(self):
+        url = ('http://localhost:8000/api/draft-holdings/')
+        data = {
+            'security': self.s1.id,
+            'draftAccount': self.da1.id,
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_listDraftHoldings(self):
+        url = ('http://localhost:8000/api/draft-holdings/')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        print(response.data)
+
+    def test_patchDraftHolding1(self):
+        url = ('http://localhost:8000/api/draft-holdings/1/')
+        data = {
+            'security': self.s2.id,
+        }
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['security'], 2)
+
+    def test_putDraftHolding1(self):
+        url = ('http://localhost:8000/api/draft-holdings/1/')
+        data = {
+            'security': self.s2.id,
+            'draftAccount': self.da2.id,
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['draftAccount'], 2)
+        self.assertEqual(response.data['security'], 2)
+
+    def test_deleteDraftAccount1(self):
+        url = ('http://localhost:8000/api/draft-holdings/1/')
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(len(apiModels.DraftHolding.objects.all()), 0)
+

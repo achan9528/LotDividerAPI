@@ -12,6 +12,8 @@ router.register(r'holdings', views.HoldingViewSet)
 router.register(r'tax-lots', views.TaxLotViewSet)
 router.register(r'proposals', views.ProposalViewSet)
 router.register(r'draft-portfolios', views.DraftPortfolioViewSet)
+router.register(r'draft-accounts', views.DraftAccountViewSet)
+router.register(r'draft-holdings', views.DraftHoldingsViewSet)
 
 urlpatterns = [
     path('api/welcome/', views.TestView.as_view()),

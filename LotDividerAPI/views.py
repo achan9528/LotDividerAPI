@@ -92,3 +92,21 @@ class DraftPortfolioViewSet(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             return serializers.ReadDraftPortfolioSerializer
         return serializers.DraftPortfolioSerializer
+
+class DraftAccountViewSet(viewsets.ModelViewSet):
+    queryset = apiModels.DraftAccount.objects.all()
+    serializer_class = serializers.DraftAccountSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.ReadDraftAccountSerializer
+        return serializers.DraftAccountSerializer
+
+class DraftHoldingsViewSet(viewsets.ModelViewSet):
+    queryset = apiModels.DraftHolding.objects.all()
+    serializer_class = serializers.DraftHoldingSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.ReadDraftHoldingSerializer
+        return serializers.DraftHoldingSerializer

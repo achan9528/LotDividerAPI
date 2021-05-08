@@ -133,26 +133,26 @@ class DraftPortfolio(models.Model):
     def __str__(self):
         return (f"Draft Portfolio Name: {self.name}, Draft Portfolio Number: {self.number}")
 
-# class DraftAccount(models.Model):
-#     name = models.CharField(max_length=50, blank=True, default="")
-#     number = models.CharField(max_length=50, default=uuid.uuid4)
-#     draftPortfolio = models.ForeignKey(DraftPortfolio, related_name="draftAccounts", on_delete=models.CASCADE)
-#     createdAt = models.DateTimeField(auto_now_add=True)
-#     updatedAt = models.DateTimeField(auto_now=True)
+class DraftAccount(models.Model):
+    name = models.CharField(max_length=50, blank=True, default="")
+    number = models.CharField(max_length=50, default=uuid.uuid4)
+    draftPortfolio = models.ForeignKey(DraftPortfolio, related_name="draftAccounts", on_delete=models.CASCADE)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
     
-#     # draftHoldings = holdings
+    # draftHoldings = holdings
     
-#     def __str__(self):
-#         return (f"Draft Account Name: {self.name}, Draft Account Number: {self.number}")
+    def __str__(self):
+        return (f"Draft Account Name: {self.name}, Draft Account Number: {self.number}")
 
-# class DraftHolding(models.Model):
-#     security = models.ForeignKey(Security, related_name="relatedDraftHoldings", on_delete=models.CASCADE)
-#     draftAccount = models.ForeignKey(DraftAccount, related_name="draftHoldings", on_delete=models.CASCADE)
+class DraftHolding(models.Model):
+    security = models.ForeignKey(Security, related_name="relatedDraftHoldings", on_delete=models.CASCADE)
+    draftAccount = models.ForeignKey(DraftAccount, related_name="draftHoldings", on_delete=models.CASCADE)
     
-#     #taxLots = tax lots associated with the holding
+    #taxLots = tax lots associated with the holding
 
-#     def __str__(self):
-#         return (f"Draft Holding: {self.security.name}, Draft Account Name: {self.draftAccount.name}")
+    def __str__(self):
+        return (f"Draft Holding: {self.security.name}, Draft Account Name: {self.draftAccount.name}")
 
 # class DraftTaxLot(models.Model):
 #     number = models.CharField(max_length=50, default=uuid.uuid4)

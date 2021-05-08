@@ -285,3 +285,52 @@ class DraftPortfolioSerializer(serializers.ModelSerializer):
         ]
         depth = 2
 
+class ReadDraftAccountSerializer(serializers.ModelSerializer):
+    draftPortfolio = ReadDraftPortfolioSerializer()
+    class Meta:
+        model = apiModels.DraftAccount
+        fields = [
+            'name',
+            'draftPortfolio',
+        ]
+        depth = 2
+
+class DraftAccountSerializer(serializers.ModelSerializer):
+    draftPortfolio = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.DraftPortfolio.objects.all()
+    )
+
+    class Meta:
+        model = apiModels.DraftAccount
+        fields = [
+            'name',
+            'draftPortfolio',
+        ]
+        depth = 2
+
+class ReadDraftHoldingSerializer(serializers.ModelSerializer):
+    security = ReadSecuritySerializer()
+    draftAccount = ReadDraftAccountSerializer()
+    class Meta:
+        model = apiModels.DraftHolding
+        fields = [
+            'security',
+            'draftAccount',
+        ]
+        depth = 2
+
+class DraftHoldingSerializer(serializers.ModelSerializer):
+    security = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.Security.objects.all()
+    )
+    draftAccount = serializers.PrimaryKeyRelatedField(
+        queryset = apiModels.DraftAccount.objects.all()
+    )
+
+    class Meta:
+        model = apiModels.DraftHolding
+        fields = [
+            'security',
+            'draftAccount',
+        ]
+        depth = 2
