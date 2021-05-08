@@ -1,5 +1,5 @@
 from LotDividerAPI.models import User
-from LotDividerAPI import serializers
+from LotDividerAPI import serializers, read_serializers
 from django.http import HttpResponseBadRequest
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -28,7 +28,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadProjectSerializer
+            return read_serializers.ProjectSerializer
         return serializers.ProjectSerializer
 
 class ProductTypesViewSet(viewsets.ModelViewSet):
@@ -41,12 +41,17 @@ class SecurityViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadSecuritySerializer
+            return read_serializers.SecuritySerializer
         return serializers.SecuritySerializer    
     
 class PortfolioViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Portfolio.objects.all()
     serializer_class = serializers.PortfolioSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return read_serializers.PortfolioSerializer
+        return serializers.PortfolioSerializer
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Account.objects.all()
@@ -54,7 +59,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadAccountSerializer
+            return read_serializers.AccountSerializer
         return serializers.AccountSerializer
 
 class HoldingViewSet(viewsets.ModelViewSet):
@@ -63,7 +68,7 @@ class HoldingViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadHoldingSerializer
+            return read_serializers.HoldingSerializer
         return serializers.HoldingSerializer
 
 class TaxLotViewSet(viewsets.ModelViewSet):
@@ -72,7 +77,7 @@ class TaxLotViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadTaxLotSerializer
+            return read_serializers.TaxLotSerializer
         return serializers.TaxLotSerializer
 
 class ProposalViewSet(viewsets.ModelViewSet):
@@ -81,7 +86,7 @@ class ProposalViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadProposalSerializer
+            return read_serializers.ProposalSerializer
         return serializers.ProposalSerializer
 
 class DraftPortfolioViewSet(viewsets.ModelViewSet):
@@ -90,7 +95,7 @@ class DraftPortfolioViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadDraftPortfolioSerializer
+            return read_serializers.DraftPortfolioSerializer
         return serializers.DraftPortfolioSerializer
 
 class DraftAccountViewSet(viewsets.ModelViewSet):
@@ -99,7 +104,7 @@ class DraftAccountViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadDraftAccountSerializer
+            return read_serializers.DraftAccountSerializer
         return serializers.DraftAccountSerializer
 
 class DraftHoldingViewSet(viewsets.ModelViewSet):
@@ -108,7 +113,7 @@ class DraftHoldingViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadDraftHoldingSerializer
+            return read_serializers.DraftHoldingSerializer
         return serializers.DraftHoldingSerializer
 
 class DraftTaxLotViewSet(viewsets.ModelViewSet):
@@ -117,5 +122,5 @@ class DraftTaxLotViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return serializers.ReadDraftTaxLotSerializer
+            return read_serializers.DraftTaxLotSerializer
         return serializers.DraftTaxLotSerializer
