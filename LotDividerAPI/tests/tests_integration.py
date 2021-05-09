@@ -181,7 +181,7 @@ class ProductTypeTestCase(test.APITestCase):
         )
 
     def test_addProductType(self):
-        url = 'http://localhost:8000/api/products/'
+        url = 'http://localhost:8000/api/product-types/'
         data = {
             'name': 'mutual fund',
             'fractionalLotsAllowed': 'false',
@@ -191,20 +191,20 @@ class ProductTypeTestCase(test.APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     
     def test_getProductTypes(self):
-        url = 'http://localhost:8000/api/products/'
+        url = 'http://localhost:8000/api/product-types/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         print(response.content)
 
     def test_getProductType1(self):
-        url = 'http://localhost:8000/api/products/1/'
+        url = 'http://localhost:8000/api/product-types/1/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         print(response.content)
 
     def test_putProductType1(self):
-        url = 'http://localhost:8000/api/products/1/'
+        url = 'http://localhost:8000/api/product-types/1/'
         data = {
             'name': 'equity',
             'fractionalLotsAllowed': 'true'
@@ -214,7 +214,7 @@ class ProductTypeTestCase(test.APITestCase):
         print(response.content)
 
     def test_patchProductType1(self):
-        url = 'http://localhost:8000/api/products/1/'
+        url = 'http://localhost:8000/api/product-types/1/'
         data = {
             'fractionalLotsAllowed': 'false'
         }
@@ -667,6 +667,7 @@ class ProposalTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/proposals/')
         data = {
             'name': 'test proposal',
+            'autoCalculate': 'false',
             'project': self.pj1.id,
         }
         response = self.client.post(url, data, format='json')
