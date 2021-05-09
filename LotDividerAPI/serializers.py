@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from LotDividerAPI import models as apiModels
 from rest_auth.serializers import UserDetailsSerializer
+from LotDividerAPI import services
 
 # get_user_model() must be used instead of regular
 # User model because the custom User model in models.py
@@ -199,6 +200,29 @@ class ProposalSerializer(serializers.ModelSerializer):
             'draftPortfolios',
         ]
         depth = 2
+
+class AutoProposalSerializer(serializers.Serializer):
+    proposalName = serializers.CharField()
+    projectID = serializers.IntegerField()
+    accountID = serializers.IntegerField()
+    autoCalculate = serializers.BooleanField()
+    numberOfPortfolios = serializers.IntegerField()
+    targetShares = serializers.DictField(child=serializers.IntegerField())
+    method = serializers.ChoiceField(choices=[('HIFO','HIFO')])
+
+    def create(self, validated_data):
+        return services.splitPortfolio(
+            projectID = validated_data['projectID'],
+            accountID = validated_data['accountID'],
+            method = validated_data['method'],
+            numberOfPortfolios = validated_data['numberOfPortfolios'],
+            holdingsDict = validated_data['targetShares'],
+        )
+
+    def to_representation(self, instance):
+        return {
+            'proposalID': instance.id 
+        }
 
 class DraftPortfolioSerializer(serializers.ModelSerializer):
     proposal = serializers.PrimaryKeyRelatedField(

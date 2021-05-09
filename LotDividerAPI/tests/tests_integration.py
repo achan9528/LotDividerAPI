@@ -3,6 +3,8 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from LotDividerAPI import models as apiModels
 from django.contrib.auth.hashers import make_password
+from LotDividerAPI import serializers, read_serializers
+from rest_framework.renderers import JSONRenderer
 from datetime import date
 from decimal import Decimal
 
@@ -669,6 +671,23 @@ class ProposalTestCase(test.APITestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_autoCalculateProposal(self):
+        url = ('http://localhost:8000/api/proposals/')
+        data = {
+            'projectID': 1,
+            'proposalName': 'test proposal',
+            'accountID': 1,
+            'autoCalculate': 'true',
+            'numberOfPortfolios': 2,
+            'targetShares': {
+                'AMC': 10,
+            },
+            'method': 'HIFO',
+        }
+        response = self.client.post(url, data, format = 'json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        print(response.data)
 
     def test_listProposals(self):
         url = ('http://localhost:8000/api/proposals/')
@@ -1373,10 +1392,8 @@ class SerializerTestCase(test.APITestCase):
 
     def test_readNested(self):
         url = ('http://localhost:8000/api/proposals/')
-        response = self.client.get(url, format='json')
+        response = self.client.get(url, format='json', indent=4)
+        response.render()
         print(response.content)
-
-    # def test_readNestedProject(self):
-    #     url = ('http://localhost:8000/api/projects/')
-    #     response = self.client.get(url, format='json')
-    #     print(response.data)
+        print(type(response.data))
+        print(type(response.content))
