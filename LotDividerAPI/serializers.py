@@ -6,7 +6,9 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from LotDividerAPI import models as apiModels
 from rest_auth.serializers import UserDetailsSerializer
-from LotDividerAPI import services
+from LotDividerAPI import services, read_serializers
+from django.forms.models import model_to_dict
+
 
 # get_user_model() must be used instead of regular
 # User model because the custom User model in models.py
@@ -220,8 +222,9 @@ class AutoProposalSerializer(serializers.Serializer):
         )
 
     def to_representation(self, instance):
+        ppSerializer = read_serializers.ProposalSerializer(instance)
         return {
-            'proposalID': instance.id 
+            'proposal': ppSerializer.data
         }
 
 class DraftPortfolioSerializer(serializers.ModelSerializer):
