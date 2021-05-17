@@ -6,36 +6,31 @@ import pandas as pd
 
 def handlePortfolioUploadRequest(request):
     # need to perform a .save() when calling serializers
-    df = pd.read_excel(request.FILES['0'], engine='openpyxl')
-    # for key, value in request.FILES:
-    #     if value != "":
-    #         parseFileUpload(value, request.POST['portfolioName'], request.POST['accountName'][i])
+    
+    # validate
+
+    # if valid, then parse
+    newPortfolio = parseFileUpload(request)
+    return newPortfolio
 
 def lots(ticker, accountID, number, cusip, units, date, totalFed, totalState):
     holdingID = createHolding(ticker, accountID)
     createTaxLot(number, ticker, cusip, units, date, totalFed, totalState, holdingID)
 
-def parseFileUpload(file, portfolioName, accountName):
-    portfolioID = createPortfolio(portfolioName, 1)
-    accountID = createAccount(accountName, portfolioID)
-    df = pd.read_excel(file)
-    df.fillna("missing", inplace=True)
-    print(df)
-    df.apply(lambda x: lots(x['Ticker'], accountID,x['Tax Lot Number'], x['CUSIP'], x['Units'], x['Date Acquired'], x['Total Federal Cost'], x['Total State Cost']), axis=1)
+def parseFileUpload(request):
+    portfolioID = Portfolio.objects.create(
+            name=request.POST['portfolioName']
+        ).id
+    
+    for key, value in request.FILES.items():
+        accountName = key.split("__")[0]
+        accountID = createAccount(accountName, portfolioID)
+        df = pd.read_excel(value)
+        df.fillna("missing", inplace=True)
+        print(df)
+        df.apply(lambda x: lots(x['Ticker'], accountID,x['Tax Lot Number'], x['CUSIP'], x['Units'], x['Acquisition Date'], x['Total Federal Cost'], x['Total State Cost']), axis=1)
 
-def createPortfolio(name, ownerID):
-    if len(Portfolio.objects.filter(name=name)) == 0:
-        newPortfolio = Portfolio.objects.create(
-            name=name,
-            owner=User.objects.get(id=ownerID)
-        )
-        return newPortfolio.id
-    else:
-        portfolio = Portfolio.objects.get(
-            name=name,
-            owner=User.objects.get(id=ownerID)
-        )
-        return portfolio.id
+    return Portfolio.objects.get(id=portfolioID)
 
 def createAccount(name, portfolioID):
     if len(Account.objects.filter(name=name,portfolio=Portfolio.objects.get(id=portfolioID))) == 0:

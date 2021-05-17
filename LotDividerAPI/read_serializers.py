@@ -123,16 +123,19 @@ class HoldingSerializer(serializers.ModelSerializer):
         ]
     
 class AccountSerializer(serializers.ModelSerializer):
+    holdings = HoldingSerializer(many=True)
     class Meta:
         model = apiModels.Account
         fields = [
             'name',
-            'portfolio'
+            'holdings',
         ]
 
 class PortfolioSerializer(serializers.ModelSerializer):
+    accounts = AccountSerializer(many=True)
     class Meta:
         model = apiModels.Portfolio
         fields = [
-            'name'
+            'name',
+            'accounts',
         ]

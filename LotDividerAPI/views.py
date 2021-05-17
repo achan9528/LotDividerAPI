@@ -66,8 +66,10 @@ class PortfolioViewSet(viewsets.ModelViewSet):
         # pass request to the parsing service
         # if successful, return Success Response,
         # else return Error
-        services.handlePortfolioUploadRequest(request)
-        return Response({'test':"testing"}, status=status.HTTP_200_OK)
+        portfolio = services.handlePortfolioUploadRequest(request)
+        serializer = read_serializers.PortfolioSerializer
+        serializer = serializer(portfolio)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Account.objects.all()
