@@ -4,11 +4,18 @@ from collections import deque
 from django.db.models import F, ExpressionWrapper, DecimalField
 import pandas as pd
 
+def handlePortfolioUploadRequest(request):
+    # need to perform a .save() when calling serializers
+    df = pd.read_excel(request.FILES['0'], engine='openpyxl')
+    # for key, value in request.FILES:
+    #     if value != "":
+    #         parseFileUpload(value, request.POST['portfolioName'], request.POST['accountName'][i])
+
 def lots(ticker, accountID, number, cusip, units, date, totalFed, totalState):
     holdingID = createHolding(ticker, accountID)
     createTaxLot(number, ticker, cusip, units, date, totalFed, totalState, holdingID)
 
-def uploadPortfolio(file, portfolioName, accountName):
+def parseFileUpload(file, portfolioName, accountName):
     portfolioID = createPortfolio(portfolioName, 1)
     accountID = createAccount(accountName, portfolioID)
     df = pd.read_excel(file)

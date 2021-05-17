@@ -92,6 +92,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = apiModels.Project
         fields = [
             'id',
+            'name',
             'proposals',
             'owners'
         ]

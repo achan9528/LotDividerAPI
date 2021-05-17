@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics, permissions, mixins, viewsets
 from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_auth.registration import views as restAuthViews
 from LotDividerAPI import models as apiModels
 
@@ -25,6 +25,7 @@ class TestView(APIView):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
+    permission_classes = [permissions.IsAuthenticated]
     renderer_classses = [JSONRenderer]
     parser_classes = [JSONParser]
     
@@ -54,13 +55,19 @@ class PortfolioViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Portfolio.objects.all()
     serializer_class = serializers.PortfolioSerializer
     renderer_classses = [JSONRenderer]
-    parser_classes = [JSONParser]
+    parser_classes = [MultiPartParser, JSONParser]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return read_serializers.PortfolioSerializer
         return serializers.PortfolioSerializer
 
+    def create(self, request, *args, **kwargs):
+        # pass request to the parsing service
+        # if successful, return Success Response,
+        # else return Error
+        services.handlePortfolioUploadRequest(request)
+        return Response({'test':"testing"}, status=status.HTTP_200_OK)
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Account.objects.all()

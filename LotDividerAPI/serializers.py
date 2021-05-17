@@ -92,7 +92,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     owners = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=apiModels.User.objects.all()
+        queryset=apiModels.User.objects.all(),
+        required=False,
     )
     class Meta:
         model = apiModels.Project
