@@ -4,33 +4,40 @@ from collections import deque
 from django.db.models import F, ExpressionWrapper, DecimalField
 import pandas as pd
 
-def handlePortfolioUploadRequest(request):
-    # need to perform a .save() when calling serializers
-    
+def processNewPortfolio(request):
     # validate
+    if (len(request.FILES) > 0):
+        # if valid, then parse
+        newPortfolio = parseFileUpload(request)
+    else:
+        newPortfolio = parseHoldingsTables(request)
+    return newPortfolio
 
-    # if valid, then parse
-    newPortfolio = parseFileUpload(request)
+def parseFileUpload(request):
+    newPortfolio = Portfolio.objects.create(
+            name=request.POST['portfolioName']
+        )
+    
+    for key, value in request.FILES.items():
+        accountName = key.split("__")[0]
+        accountID = createAccount(accountName, newPortfolio.id)
+        df = pd.read_excel(value)
+        df.fillna("missing", inplace=True)
+        print(df)
+        df.apply(lambda x: lots(x['Ticker'], accountID,x['Tax Lot Number'], x['CUSIP'], x['Units'], x['Acquisition Date'], x['Total Federal Cost'], x['Total State Cost']), axis=1)
+
     return newPortfolio
 
 def lots(ticker, accountID, number, cusip, units, date, totalFed, totalState):
     holdingID = createHolding(ticker, accountID)
     createTaxLot(number, ticker, cusip, units, date, totalFed, totalState, holdingID)
 
-def parseFileUpload(request):
-    portfolioID = Portfolio.objects.create(
-            name=request.POST['portfolioName']
-        ).id
-    
-    for key, value in request.FILES.items():
-        accountName = key.split("__")[0]
-        accountID = createAccount(accountName, portfolioID)
-        df = pd.read_excel(value)
-        df.fillna("missing", inplace=True)
-        print(df)
-        df.apply(lambda x: lots(x['Ticker'], accountID,x['Tax Lot Number'], x['CUSIP'], x['Units'], x['Acquisition Date'], x['Total Federal Cost'], x['Total State Cost']), axis=1)
+def parseHoldingsTables(request):
+    newPortfolio = Portfolio.objects.create(
+        name=request.POST['portfolioName']
+    )
 
-    return Portfolio.objects.get(id=portfolioID)
+    return newPortfolio
 
 def createAccount(name, portfolioID):
     if len(Account.objects.filter(name=name,portfolio=Portfolio.objects.get(id=portfolioID))) == 0:
@@ -178,7 +185,10 @@ def splitPortfolio(projectID, accountID, method, numberOfPortfolios, holdingsDic
         portfolioQueue.clear()
         portfolioQueue = deque(portfolios)
     
-    proposal = Proposal.objects.create(project=Project.objects.get(id=projectID))
+    proposal = Proposal.objects.create(
+            project=Project.objects.get(id=projectID),
+            accountUsed=Account.objects.get(id=accountID),
+        )
     for portfolio in portfolioQueue:
         draftPortfolio = DraftPortfolio.objects.create(
             proposal = proposal,
@@ -187,6 +197,12 @@ def splitPortfolio(projectID, accountID, method, numberOfPortfolios, holdingsDic
             draftPortfolio = draftPortfolio,
         )
         for ticker in portfolio.keys():
+            proposal.holdingsUsed.add(
+                Holding.objects.get(
+                    security=Security.objects.get(ticker=ticker),
+                    account=Account.objects.get(id=accountID)
+                )
+            )
             draftHolding = DraftHolding.objects.create(
                     security = Security.objects.get(ticker=ticker),
                     draftAccount = draftAccount
@@ -385,3 +401,6 @@ def getLots2(targetShares, holding, method="HIFO"):
         "usedLots": returnLots,
         "remainingLots": currentLots
     }
+
+def getSummaryTotals(proposal):
+    

@@ -214,13 +214,14 @@ class AutoProposalSerializer(serializers.Serializer):
     method = serializers.ChoiceField(choices=[('HIFO','HIFO')])
 
     def create(self, validated_data):
-        return services.splitPortfolio(
+        newPortfolio = services.splitPortfolio(
             projectID = validated_data['projectID'],
             accountID = validated_data['accountID'],
             method = validated_data['method'],
             numberOfPortfolios = validated_data['numberOfPortfolios'],
             holdingsDict = validated_data['targetShares'],
         )
+        return newPortfolio
 
     def to_representation(self, instance):
         ppSerializer = read_serializers.ProposalSerializer(instance)

@@ -66,7 +66,7 @@ class PortfolioViewSet(viewsets.ModelViewSet):
         # pass request to the parsing service
         # if successful, return Success Response,
         # else return Error
-        portfolio = services.handlePortfolioUploadRequest(request)
+        portfolio = services.processNewPortfolio(request)
         serializer = read_serializers.PortfolioSerializer
         serializer = serializer(portfolio)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -111,11 +111,20 @@ class ProposalViewSet(viewsets.ModelViewSet):
     parser_classes = [JSONParser]
 
     def get_serializer_class(self):
+        print(self.request.data)
         if self.request.method == 'GET':
             return read_serializers.ProposalSerializer
         if self.request.method == 'POST' and self.request.data['autoCalculate'] == 'true':
             return serializers.AutoProposalSerializer
         return serializers.ProposalSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        dict1 = serializer.data
+        dict2 = services.getSummaryTotals(instance)
+        dict1.update(dict2)
+        return Response(dict1, status=status.HTTP_200_OK)
 
 class DraftPortfolioViewSet(viewsets.ModelViewSet):
     queryset = apiModels.DraftPortfolio.objects.all()

@@ -111,6 +111,8 @@ class TaxLot(models.Model):
 class Proposal(models.Model):
     name = models.CharField(max_length=50, blank=True, default="")
     number = models.CharField(max_length=50, default=uuid.uuid4)
+    accountUsed = models.ForeignKey(Account, related_name="relatedProposals", on_delete=models.CASCADE)
+    holdingsUsed = models.ManyToManyField(Holding, related_name="relatedProposals")
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
     project = models.ForeignKey(Project, related_name="proposals", on_delete=models.CASCADE)

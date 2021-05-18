@@ -73,29 +73,6 @@ class DraftPortfolioSerializer(serializers.ModelSerializer):
         ]
         depth = 2
 
-class ProposalSerializer(serializers.ModelSerializer):
-    draftPortfolios = DraftPortfolioSerializer(many=True)
-    class Meta:
-        model = apiModels.Proposal
-        fields = [
-            'id',
-            'name',
-            'draftPortfolios',
-            'project',
-        ]
-        depth = 2
-
-class ProjectSerializer(serializers.ModelSerializer):
-    proposals = ProposalSerializer(many=True)
-    owners = UserDetailsSerializer(many=True)
-    class Meta:
-        model = apiModels.Project
-        fields = [
-            'id',
-            'name',
-            'proposals',
-            'owners'
-        ]
 
 class TaxLotSerializer(serializers.ModelSerializer):
     holding = serializers.StringRelatedField()
@@ -127,7 +104,9 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = apiModels.Account
         fields = [
+            'id',
             'name',
+            'number',
             'holdings',
         ]
 
@@ -138,4 +117,32 @@ class PortfolioSerializer(serializers.ModelSerializer):
         fields = [
             'name',
             'accounts',
+        ]
+
+class ProposalSerializer(serializers.ModelSerializer):
+    draftPortfolios = DraftPortfolioSerializer(many=True)
+    holdingsUsed = HoldingSerializer(many=True)
+    accountUsed = AccountSerializer()
+    class Meta:
+        model = apiModels.Proposal
+        fields = [
+            'id',
+            'name',
+            'draftPortfolios',
+            'project',
+            'holdingsUsed',
+            'accountUsed',
+        ]
+        depth = 2
+
+class ProjectSerializer(serializers.ModelSerializer):
+    proposals = ProposalSerializer(many=True)
+    owners = UserDetailsSerializer(many=True)
+    class Meta:
+        model = apiModels.Project
+        fields = [
+            'id',
+            'name',
+            'proposals',
+            'owners'
         ]
