@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from datetime import date
+import yfinance as yf
 import uuid
 
 class User(AbstractUser):
@@ -46,9 +48,9 @@ class ProductType(models.Model):
         return (f"Product Type Name: {self.name}, Fractional Lots Allowed: {self.fractionalLotsAllowed}, ID: {self.id}")
 
 class Security(models.Model):
-    ticker = models.CharField(max_length=50)
-    cusip = models.CharField(max_length=50)
-    name = models.CharField(max_length=50)
+    ticker = models.CharField(max_length=50, unique=True)
+    cusip = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     number = models.CharField(max_length=50, default=uuid.uuid4)
     productType = models.ForeignKey(ProductType, related_name="relatedSecurities", on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True)
@@ -56,6 +58,12 @@ class Security(models.Model):
 
     def __str__(self):
         return (f"Security Ticker {self.ticker}, Security Name: {self.name}, Security Product Type: {self.productType.name}")
+
+    @property
+    def latestClosingPrice(self):
+        closingDate = date.today().strftime("%Y-%m-%d")
+        closingPrice = yf.download([self.ticker], closingDate)['Adj Close'][0]
+        return closingPrice
 
 class Portfolio(models.Model):
     name = models.CharField(max_length=50)

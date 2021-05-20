@@ -6,6 +6,9 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from LotDividerAPI import models as apiModels
 from rest_auth.serializers import UserDetailsSerializer
+from LotDividerAPI import queries
+from decimal import Decimal
+
 
 User = get_user_model()
 
@@ -18,7 +21,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         ]
 
 class SecuritySerializer(serializers.ModelSerializer):
-    productType = ProductTypeSerializer
+    productType = ProductTypeSerializer()
     class Meta:
         model = apiModels.Security
         fields = [
@@ -29,13 +32,23 @@ class SecuritySerializer(serializers.ModelSerializer):
         ]
 
 class DraftTaxLotSerializer(serializers.ModelSerializer):
+    marketValue = serializers.SerializerMethodField()
+
     class Meta:
         model = apiModels.DraftTaxLot
         fields = [
             'id',
             'units',
             'referencedLot',
+            'marketValue',
         ]
+
+    def get_marketValue(self, instance):
+        closingPrices = queries.getClosingPrices()
+        return (
+            Decimal(closingPrices[instance.draftHolding.security.ticker]) *\
+                instance.units
+            )
 
 class DraftHoldingSerializer(serializers.ModelSerializer):
     draftTaxLots = DraftTaxLotSerializer(many=True)

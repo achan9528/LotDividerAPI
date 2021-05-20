@@ -1,8 +1,10 @@
 from .models import *
 from decimal import Decimal
 from collections import deque
-from django.db.models import F, ExpressionWrapper, DecimalField
+from django.db.models import F, ExpressionWrapper, DecimalField, When, Case
 import pandas as pd
+from .queries import *
+from datetime import date
 
 def processNewPortfolio(request):
     # validate
@@ -402,5 +404,25 @@ def getLots2(targetShares, holding, method="HIFO"):
         "remainingLots": currentLots
     }
 
+def updateSecurityPrices(closingDate=date.today().strftime("%Y-%m-%d")):
+    closingPrices = getClosingPrices(closingDate)
+    for ticker, data in closingPrices.items():
+        SecurityPrice.objects.create(
+            security= Security.objects.get(ticker=ticker),
+            price=data[0],
+            date=closingDate
+        )
+
 def getSummaryTotals(proposal):
+
+    closingPrices = getClosingPrices().to_dict('records')[0]
+
+    whens = [When(draftHolding__security__ticker=key, then=value) for key,value in closingPrices.items()]
+    proposalLots = DraftTaxLot.objects.filter(
+        draftHolding__draftAccount__draftPortfolio__proposal__id=proposal.id
+    ).annotate(
+        price=Case(*whens, output_field=DecimalField()),
+        mv=Case(*whens, output_field=DecimalField())*F('units')
+    )
+
     

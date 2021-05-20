@@ -118,13 +118,13 @@ class ProposalViewSet(viewsets.ModelViewSet):
             return serializers.AutoProposalSerializer
         return serializers.ProposalSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        dict1 = serializer.data
-        dict2 = services.getSummaryTotals(instance)
-        dict1.update(dict2)
-        return Response(dict1, status=status.HTTP_200_OK)
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance)
+    #     dict1 = serializer.data
+    #     dict2 = services.getSummaryTotals(instance)
+    #     dict1.update(dict2)
+    #     return Response(dict1, status=status.HTTP_200_OK)
 
 class DraftPortfolioViewSet(viewsets.ModelViewSet):
     queryset = apiModels.DraftPortfolio.objects.all()
