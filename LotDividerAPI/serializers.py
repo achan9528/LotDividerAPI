@@ -287,4 +287,3 @@ class DraftTaxLotSerializer(serializers.ModelSerializer):
             'referencedLot',
         ]
         depth = 2
-

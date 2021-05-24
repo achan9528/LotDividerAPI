@@ -8,6 +8,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_auth.registration import views as restAuthViews
 from LotDividerAPI import models as apiModels
+from decimal import Decimal
+from rest_framework.exceptions import ValidationError
 
 # Login and Registration views are through the django-rest-auth
 # library (see github)
@@ -118,14 +120,6 @@ class ProposalViewSet(viewsets.ModelViewSet):
             return serializers.AutoProposalSerializer
         return serializers.ProposalSerializer
 
-    # def retrieve(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(instance)
-    #     dict1 = serializer.data
-    #     dict2 = services.getSummaryTotals(instance)
-    #     dict1.update(dict2)
-    #     return Response(dict1, status=status.HTTP_200_OK)
-
 class DraftPortfolioViewSet(viewsets.ModelViewSet):
     queryset = apiModels.DraftPortfolio.objects.all()
     serializer_class = serializers.DraftPortfolioSerializer
@@ -169,3 +163,27 @@ class DraftTaxLotViewSet(viewsets.ModelViewSet):
         if self.request.method == 'GET':
             return read_serializers.DraftTaxLotSerializer
         return serializers.DraftTaxLotSerializer
+
+class DraftTaxLotBatchUpdate(APIView):
+    parser_classes = [JSONParser]
+    def patch(self, request, *args, **kwargs):
+        data = request.data
+        instances = []
+        print(data)
+        for productType, productTypeDict in data.items():
+            print(productType)
+            for ticker, tickerDict in productTypeDict.items():
+                for lots, lotDict in tickerDict.items():
+                    for account, accountDict in lotDict.items():
+                        try:
+                            print('test')
+                            print(accountDict)
+                            instance = apiModels.DraftTaxLot.objects.get(id=int(accountDict['draftTaxLotID']))
+                            instance.units = Decimal(float(accountDict['units']))
+                            instance.save()
+                            instances.append(instance)
+                        except (apiModels.DraftTaxLot.DoesNotExist, ValueError):
+                            raise ValidationError()
+        serializer = read_serializers.DraftTaxLotSerializer(instances, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+

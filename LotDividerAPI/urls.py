@@ -20,5 +20,6 @@ urlpatterns = [
     path('api/welcome/', views.TestView.as_view()),
     path('api/rest-auth/', include('rest_auth.urls')),
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api/draft-taxlots/batch/', views.DraftTaxLotBatchUpdate.as_view()),
     path('api/', include(router.urls)),
 ]
