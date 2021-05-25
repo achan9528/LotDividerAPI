@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth.account', # django-rest-auth registration
     'rest_auth.registration', # django-rest-auth registration
     'LotDividerAPI.apps.LotdividerapiConfig', # configuration file
+    'debug_toolbar',
 ]
 
 SITE_ID = 1 # django-rest-auth registration
@@ -75,6 +76,7 @@ REST_FRAMEWORK = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware', # debug toolbar
     'corsheaders.middleware.CorsMiddleware', # allows cross origin requests
     'django.middleware.common.CommonMiddleware', # allows cross origin requests
     'django.middleware.security.SecurityMiddleware',
@@ -84,6 +86,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# for django debug toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
 ]
 
 # "whitelist" of approved origins from which requests can come from
@@ -158,7 +165,15 @@ DATABASES = {
     }
 }
 
-
+CACHES = {
+    'default':{
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'http://127.0.0.1:6379',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 
 
 # since we are using a custom User class, we have to change this setting
@@ -210,3 +225,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# DEBUG_TOOLBAR_PANELS = [
+#     'debug_toolbar.panels.versions.VersionsPanel',
+#     'debug_toolbar.panels.timer.TimerPanel',
+#     'debug_toolbar.panels.settings.SettingsPanel',
+#     'debug_toolbar.panels.headers.HeadersPanel',
+#     'debug_toolbar.panels.request.RequestPanel',
+#     'debug_toolbar.panels.sql.SQLPanel',
+#     'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+#     'debug_toolbar.panels.templates.TemplatesPanel',
+#     'debug_toolbar.panels.cache.CachePanel',
+#     'debug_toolbar.panels.signals.SignalsPanel',
+#     'debug_toolbar.panels.logging.LoggingPanel',
+#     'debug_toolbar.panels.redirects.RedirectsPanel',
+# ]

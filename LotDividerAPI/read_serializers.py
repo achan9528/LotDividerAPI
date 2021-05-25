@@ -44,11 +44,8 @@ class DraftTaxLotSerializer(serializers.ModelSerializer):
         ]
 
     def get_marketValue(self, instance):
-        closingPrices = queries.getClosingPrices()
-        return (
-            Decimal(closingPrices[instance.draftHolding.security.ticker]) *\
-                instance.units
-            )
+        closingPrice = queries.getClosingPrice(instance.draftHolding.security.ticker)
+        return (Decimal(closingPrice) * instance.units)
 
 class DraftHoldingSerializer(serializers.ModelSerializer):
     draftTaxLots = DraftTaxLotSerializer(many=True)

@@ -210,7 +210,7 @@ class AutoProposalSerializer(serializers.Serializer):
     accountID = serializers.IntegerField()
     autoCalculate = serializers.BooleanField()
     numberOfPortfolios = serializers.IntegerField()
-    targetShares = serializers.DictField(child=serializers.IntegerField())
+    targetShares = serializers.DictField(child=serializers.DecimalField(max_digits=8, decimal_places=2))
     method = serializers.ChoiceField(choices=[('HIFO','HIFO')])
 
     def create(self, validated_data):
