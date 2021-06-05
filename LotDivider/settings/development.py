@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'allauth.account', # django-rest-auth registration
     'rest_auth.registration', # django-rest-auth registration
     'LotDividerAPI.apps.LotdividerapiConfig', # configuration file
+    'celery',
+    'django_celery_results', #scheduled task manager and async worker
 ]
 
 SITE_ID = 1 # django-rest-auth registration
@@ -223,3 +225,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CELERY_CACHE_BACKEND='default'
+CELERY_RESULT_BACKEND='redis://'

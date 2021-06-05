@@ -11,7 +11,16 @@ def getClosingPrices(closingDate=date.today().strftime("%Y-%m-%d")):
     closingPrices = closingPrices.to_dict('records')[0]
 
     r= redis.Redis(host='localhost', port=6379, db=0)
-    r.hset('closingPrices', mapping=closingPrices)
+    r.hmset('closingPrices', mapping=closingPrices)
+    print(closingPrices)
+    print('Got Closing Prices')
+
+def deleteClosingPrices():
+    tickers = list(Security.objects.values_list('ticker', flat=True).distinct())
+    r= redis.Redis(host='localhost', port=6379, db=0)
+    for ticker in tickers:
+        r.hdel('closingPrices', ticker)
+    print('Deleted Closing Prices')
 
 def getClosingPrice(ticker):
     r = redis.Redis(host='localhost', port=6379, db=0)
