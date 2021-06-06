@@ -4,10 +4,7 @@ import os
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LotDivider.settings.development')
 
-app = Celery('LotDivider',
-    broker='redis://localhost',
-    backend='redis://localhost',
-    include=['LotDividerAPI.tasks'])
+app = Celery('LotDivider', include=['LotDividerAPI.tasks'])
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.

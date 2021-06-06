@@ -7,7 +7,9 @@ import redis
 
 def getClosingPrices(closingDate=date.today().strftime("%Y-%m-%d")):
     tickers = list(Security.objects.values_list('ticker', flat=True).distinct())
+    print(closingDate)
     closingPrices = yf.download(tickers, closingDate)['Adj Close']
+    closingPrices = yf.download(tickers, start='2021-05-04', end='2021-05-04')['Adj Close']
     closingPrices = closingPrices.to_dict('records')[0]
 
     r= redis.Redis(host='localhost', port=6379, db=0)

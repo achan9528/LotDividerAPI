@@ -168,7 +168,7 @@ DATABASES = {
 CACHES = {
     'default':{
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'http://127.0.0.1:6379',
+        'LOCATION': 'http://cache:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -226,5 +226,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CELERY_CACHE_BACKEND='default'
-CELERY_RESULT_BACKEND='redis://'
+# CELERY_CACHE_BACKEND='default'
+# CELERY_RESULT_BACKEND='redis://'

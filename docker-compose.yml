@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+    # front-end:
+    #     image: achan9528/lot-divider-client
+    #     command: npm start
+    back-end:
+        image: achan9528/lot-divider-api
+        build: .
+        command: python manage.py runserver 0.0.0.0:8000
+        # volumes:
+        #     - .:/LotDividerAPI
+        #     - (location of directory to save files to on host machine):(path to save it to in container) (colon represents a delimiter)
+        ports:
+            - "8000:8000"
+        depends_on:
+            - cache
+    cache:
+        image: redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - /Users/achan/Desktop/volumes/lot-divider/redis:/data
+    celery-worker:
+        image: achan9528/lot-divider-api
+        build: .
+        command: celery -A LotDivider worker -l INFO
+        depends_on:
+            - cache
+    celery-beat:
+        image: achan9528/lot-divider-api
+        build: .
+        command: celery -A LotDivider beat
+        depends_on:
+            - celery-worker
