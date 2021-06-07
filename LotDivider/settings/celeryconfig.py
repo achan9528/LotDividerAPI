@@ -1,7 +1,8 @@
+import os
 from celery.schedules import crontab
 
-broker_url = 'redis://cache:6379/0'
-result_backend = 'redis://cache:6379/0'
+broker_url = os.environ.get('CELERY_BACKEND_URL')
+result_backend = os.environ.get('CELERY_RESULT_BACKEND')
 
 # task_serializer = 'json'
 # result_serializer = 'json'

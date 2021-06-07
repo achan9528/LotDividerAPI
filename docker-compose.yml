@@ -1,26 +1,35 @@
 version: "3.9"
 
 services:
-    # front-end:
-    #     image: achan9528/lot-divider-client
-    #     command: npm start
+    front-end:
+        image: achan9528/lot-divider-client
+        command: npm start
+        ports:
+            - "3000:3000"
+        stdin_open: true
+        tty: true
     back-end:
         image: achan9528/lot-divider-api
         build: .
-        command: python manage.py runserver 0.0.0.0:8000
-        # volumes:
-        #     - .:/LotDividerAPI
-        #     - (location of directory to save files to on host machine):(path to save it to in container) (colon represents a delimiter)
+        command: gunicorn --bind 0.0.0.0:8000 LotDivider.wsgi
         ports:
             - "8000:8000"
         depends_on:
             - cache
+    db:
+        image: postgres
+        environment: 
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+        ports:
+            - "5432:5432"
     cache:
         image: redis
         ports:
             - "6379:6379"
         volumes:
-            - /Users/achan/Desktop/volumes/lot-divider/redis:/data
+            - /var/lib/lot-divider-api/cache:/data #staging and prod (assuming linux machine)
+        depends_on: 
+            - db
     celery-worker:
         image: achan9528/lot-divider-api
         build: .
