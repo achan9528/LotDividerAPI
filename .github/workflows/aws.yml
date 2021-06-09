@@ -76,6 +76,6 @@ jobs:
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: aws.json
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
         cluster: LotDivider
         wait-for-service-stability: true

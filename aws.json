@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "backend",
-            "image": "achan9528/lot-divider-api:latest",
+            "image": "",
             "cpu": 0,
             "memory": 128,
             "portMappings": [
