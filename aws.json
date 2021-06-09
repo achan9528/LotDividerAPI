@@ -1,0 +1,154 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-2:791710216892:task-definition/Lot_Divider:16",
+    "containerDefinitions": [
+        {
+            "name": "backend",
+            "image": "achan9528/lot-divider-api:latest",
+            "cpu": 0,
+            "memory": 128,
+            "portMappings": [
+                {
+                    "containerPort": 8000,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "entryPoint": [
+                "/bin/bash"
+            ],
+            "command": [
+                "-c",
+                "\"python manage.py runserver 0.0.0.0:8000\""
+            ],
+            "environment": [
+                {
+                    "name": "CORS_ALLOWED_ORIGINS",
+                    "value": "http://frontend:3000"
+                },
+                {
+                    "name": "CELERY_BROKER_URL",
+                    "value": "redis://cache:6379/0"
+                },
+                {
+                    "name": "DB_PORT",
+                    "value": "5432"
+                },
+                {
+                    "name": "CACHE_OPTIONS_CLIENT",
+                    "value": "django_redis.client.DefaultClient"
+                },
+                {
+                    "name": "DB_USER",
+                    "value": "admin"
+                },
+                {
+                    "name": "CELERY_RESULT_BACKEND",
+                    "value": "redis://cache:6379/0"
+                },
+                {
+                    "name": "SECRET_KEY",
+                    "value": "$ypqt*encr4@md$s#w#g^ipbve-u@iyvtcd28e3jn)+a8@q30*"
+                },
+                {
+                    "name": "DB_NAME",
+                    "value": "LotDividerDB"
+                },
+                {
+                    "name": "DB_HOST",
+                    "value": "db"
+                },
+                {
+                    "name": "DEBUG",
+                    "value": "0"
+                },
+                {
+                    "name": "CACHE_BACKEND",
+                    "value": "django_redis.cache.RedisCache"
+                },
+                {
+                    "name": "CACHE_LOCATION",
+                    "value": "http://cache:6379/0"
+                },
+                {
+                    "name": "DB_ENGINE",
+                    "value": "django.db.backends.postgresql"
+                },
+                {
+                    "name": "ALLOWED_HOSTS",
+                    "value": "ec2-18-118-12-137.us-east-2.compute.amazonaws.com,18.118.12.137"
+                },
+                {
+                    "name": "CSRF_TRUSTED_ORIGINS",
+                    "value": "http://frontend:3000"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "value": "password"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": []
+        },
+        {
+            "name": "db",
+            "image": "postgres:latest",
+            "cpu": 0,
+            "memory": 128,
+            "portMappings": [
+                {
+                    "containerPort": 5432,
+                    "hostPort": 5432,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "POSTGRES_USER",
+                    "value": "admin"
+                },
+                {
+                    "name": "POSTGRES_PASSWORD",
+                    "value": "password"
+                },
+                {
+                    "name": "POSTGRES_DB",
+                    "value": "LotDividerDB"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": []
+        }
+    ],
+    "family": "Lot_Divider",
+    "revision": 16,
+    "volumes": [
+        {
+            "name": "dbVolume",
+            "dockerVolumeConfiguration": {
+                "scope": "task",
+                "driver": "local"
+            }
+        }
+    ],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "ecs.capability.docker-plugin.local"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.25"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EXTERNAL",
+        "EC2"
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "registeredAt": "2021-06-08T21:28:17.328000-07:00",
+    "registeredBy": "arn:aws:iam::791710216892:root"
+}

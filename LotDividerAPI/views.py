@@ -16,7 +16,7 @@ from rest_framework.exceptions import ValidationError
 
 class TestView(APIView):
     renderer_classes = [JSONRenderer]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
         content = {
