@@ -16,9 +16,10 @@
             ],
             "essential": true,
             "command": [
-                "bash",
-                "-c",
-                "\"echo 'hello'\""
+                "gunicorn",
+                "LotDivider.wsgi:application",
+                "--bind",
+                "0.0.0.0:8000"
             ],
             "secrets": [
                 {
