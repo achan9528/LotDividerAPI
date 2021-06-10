@@ -1,0 +1,54 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-2:791710216892:task-definition/Lot_Divider:10",
+    "containerDefinitions": [
+        {
+            "name": "frontend",
+            "image": "achan9528/lot-divider-client:latest",
+            "cpu": 0,
+            "memory": 128,
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "command": [
+                "npm start"
+            ],
+            "essential": true,
+            "mountPoints": [],
+            "volumesFrom": []
+        }
+    ],
+    "family": "Lot_Divider",
+    "revision": 10,
+    "volumes": [
+        {
+            "name": "dbVolume",
+            "dockerVolumeConfiguration": {
+                "scope": "task",
+                "driver": "local"
+            }
+        }
+    ],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "ecs.capability.docker-plugin.local"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.25"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EXTERNAL",
+        "EC2"
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "registeredAt": "2021-06-08T16:40:53.828000-07:00",
+    "registeredBy": "arn:aws:iam::791710216892:root"
+}
