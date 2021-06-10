@@ -16,11 +16,11 @@
             ],
             "essential": true,
             "entryPoint":[
-                "sh",
+                "/bin/bash",
                 "-c"
             ],
             "command": [
-                "/bin/bash -c \"python manage.py makemigrations && python manage.py migrate && gunicorn LotDivider.wsgi:application --bind 0.0.0.0:8000\""
+                "python manage.py makemigrations; python manage.py migrate; gunicorn LotDivider.wsgi:application --bind 0.0.0.0:8000"
             ],
             "secrets": [
                 {
