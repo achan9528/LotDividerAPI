@@ -78,4 +78,5 @@ jobs:
       with:
         task-definition: aws.json
         cluster: LotDivider
+        service: test-service
         wait-for-service-stability: true
