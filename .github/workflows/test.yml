@@ -7,20 +7,14 @@ jobs:
   test:
     name: Test changes
     runs-on: ubuntu-latest
-    environment: staging
+    environment: Staging
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
-
     - name: Test
-      run: echo "hello"
+      run: docker compose -f docker-compose.staging.yml up
+
   build:
     name: Build and push to docker hub
     runs-on: ubuntu-latest
