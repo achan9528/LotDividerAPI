@@ -104,18 +104,18 @@
                 }
             ],
             "essential": true,
-            "environment": [
+            "secrets": [
                 {
                     "name": "POSTGRES_USER",
-                    "value": "admin"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_USER::"
                 },
                 {
                     "name": "POSTGRES_PASSWORD",
-                    "value": "password"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_PASSWORD::"
                 },
                 {
                     "name": "POSTGRES_DB",
-                    "value": "LotDividerDB"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_NAME::"
                 }
             ],
             "mountPoints": [],
