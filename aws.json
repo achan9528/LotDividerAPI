@@ -1,5 +1,6 @@
 {
     "taskDefinitionArn": "arn:aws:ecs:us-east-2:791710216892:task-definition/Lot_Divider:16",
+    "executionRoleArn": "arn:aws:iam::791710216892:role/ecsTaskExecutionRole",
     "containerDefinitions": [
         {
             "name": "db",
