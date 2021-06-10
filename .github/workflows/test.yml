@@ -23,6 +23,8 @@ jobs:
       run: echo "hello"
   build:
     name: Build and push to docker hub
+    runs-on: ubuntu-latest
+    environment: staging
     needs: test
     steps:
         - name: Checkout
