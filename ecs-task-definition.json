@@ -120,6 +120,22 @@
             ],
             "mountPoints": [],
             "volumesFrom": []
+        },
+        {
+            "name": "cache",
+            "image": "redis:latest",
+            "cpu": 0,
+            "memory": 128,
+            "portMappings": [
+                {
+                    "containerPort": 6379,
+                    "hostPort": 6379,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "mountPoints": [],
+            "volumesFrom": []
         }
     ],
     "family": "Lot_Divider",
