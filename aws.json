@@ -18,15 +18,15 @@
             "secrets": [
                 {
                     "name": "POSTGRES_USER",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:POSTGRES_USER::"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_USER::"
                 },
                 {
                     "name": "POSTGRES_PASSWORD",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:POSTGRES_PASSWORD::"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_PASSWORD:"
                 },
                 {
                     "name": "POSTGRES_DB",
-                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:POSTGRES_DB::"
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_NAME::"
                 }
             ],
             "mountPoints": [],
