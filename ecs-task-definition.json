@@ -16,6 +16,12 @@
             ],
             "essential": true,
             "command": [
+                "python",
+                "manage.py",
+                "makemigrations;",
+                "python",
+                "manage.py",
+                "migrate;",
                 "gunicorn",
                 "LotDivider.wsgi:application",
                 "--bind",
