@@ -9,18 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     environment: Staging
     steps:
+    - name: Set up Python Environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Checkout
       uses: actions/checkout@v2
-
+    - name: Build Containers
+      run: docker-compose -d -f docker-compose.staging.yml up
     - name: Test
-      run: |
-        docker-compose -f docker-compose.staging.yml up
-        python manage.py test
+      run: python manage.py test
 
   build:
     name: Build and push to docker hub
     runs-on: ubuntu-latest
-    environment: staging
+    environment: Staging
     needs: test
     steps:
         - name: Checkout
