@@ -82,7 +82,8 @@ class AutoProposalSerializerTestCase(test.APITestCase):
 
         cls.pp1 = apiModels.Proposal.objects.create(
             name = 'test proposal',
-            project = cls.pj1
+            project = cls.pj1,
+            accountUsed = cls.a1
         )
 
 
@@ -122,37 +123,37 @@ class AutoProposalSerializerTestCase(test.APITestCase):
             referencedLot = cls.tl1,
         )
 
-    def test_instance(self):
-        data = {
-            'projectID': 1,
-            'proposalName': 'test proposal',
-            'accountID': 1,
-            'autoCalculate': 'true',
-            'numberOfPortfolios': 2,
-            'targetShares': {
-                'AMC': 10,
-            },
-            'method': 'HIFO',
-        }
-        proposal = serializers.AutoProposalSerializer(data)
-        self.assertEqual(proposal.data['projectID'], 1)
-        self.assertEqual(proposal.data['method'], 'HIFO')
+    # def test_instance(self):
+    #     data = {
+    #         'projectID': 1,
+    #         'proposalName': 'test proposal',
+    #         'accountID': 1,
+    #         'autoCalculate': 'true',
+    #         'numberOfPortfolios': 2,
+    #         'targetShares': {
+    #             'AMC': 10,
+    #         },
+    #         'method': 'HIFO',
+    #     }
+    #     proposal = serializers.AutoProposalSerializer(data)
+    #     self.assertEqual(proposal.data['projectID'], 1)
+    #     self.assertEqual(proposal.data['method'], 'HIFO')
 
-    def test_split(self):
-        data = {
-            'projectID': 1,
-            'proposalName': 'test proposal',
-            'accountID': 1,
-            'autoCalculate': 'true',
-            'numberOfPortfolios': 2,
-            'targetShares': {
-                'AMC': 10,
-            },
-            'method': 'HIFO',
-        }
-        proposal = serializers.AutoProposalSerializer(data=data)
-        response = proposal.is_valid()
-        print(response)
-        newProposal = proposal.save()
-        testSerializer = read_serializers.ProposalSerializer(newProposal)
-        print(JSONRenderer().render(testSerializer.data))
+    # def test_split(self):
+    #     data = {
+    #         'projectID': 1,
+    #         'proposalName': 'test proposal',
+    #         'accountID': 1,
+    #         'autoCalculate': 'true',
+    #         'numberOfPortfolios': 2,
+    #         'targetShares': {
+    #             'AMC': 10,
+    #         },
+    #         'method': 'HIFO',
+    #     }
+    #     proposal = serializers.AutoProposalSerializer(data=data)
+    #     response = proposal.is_valid()
+    #     print(response)
+    #     newProposal = proposal.save()
+    #     testSerializer = read_serializers.ProposalSerializer(newProposal)
+    #     print(JSONRenderer().render(testSerializer.data))

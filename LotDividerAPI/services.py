@@ -17,7 +17,7 @@ def processNewPortfolio(request):
 
 def parseFileUpload(request):
     newPortfolio = Portfolio.objects.create(
-            name=request.POST['portfolioName']
+            name=request.data['portfolioName']
         )
     
     for key, value in request.FILES.items():
@@ -35,8 +35,9 @@ def lots(ticker, accountID, number, cusip, units, date, totalFed, totalState):
     createTaxLot(number, ticker, cusip, units, date, totalFed, totalState, holdingID)
 
 def parseHoldingsTables(request):
+    print(f'parse Holdings table {request.POST}')
     newPortfolio = Portfolio.objects.create(
-        name=request.POST['portfolioName']
+        name=request.data['portfolioName']
     )
 
     return newPortfolio
