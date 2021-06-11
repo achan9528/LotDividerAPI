@@ -44,12 +44,8 @@ jobs:
       - name: Test
         run: python manage.py test
         env:
-          DB_ENGINE: ''
-          DB_NAME: ''
-          DB_HOST: ''
-          DB_PASSWORD: ''
-          DB_PORT: ''
-          DB_USER: ''
+          DB_ENGINE: 'django.db.backends.sqlite3'
+          DB_NAME: 'LotDividerTestDB'
 
   build:
     name: Build and push to docker hub
