@@ -21,25 +21,25 @@ jobs:
           echo ${{env.DB_NAME}}
           echo ${{env.DEBUG}}
         env:
-          DEBUG=${{env.DEBUG}}
+          DEBUG:${{env.DEBUG}}
       - name: Build Containers
         env:
-          SECRET_KEY=${{env.SECRET_KEY}}
-          DEBUG=${{env.DEBUG}}
-          CORS_ALLOWED_ORIGINS=${{env.CORS_ALLOWED_ORIGINS}}
-          CSRF_TRUSTED_ORIGINS=${{env.CSRF_TRUSTED_ORIGINS}}
-          DB_ENGINE=${{env.DB_ENGINE}}
-          DB_NAME=${{env.DB_NAME}}
-          DB_HOST=${{env.DB_HOST}}
-          DB_PASSWORD=${{env.DB_PASSWORD}}
-          DB_PORT=${{env.DB_PORT}}
-          DB_USER=${{env.DB_USER}}
-          CACHE_BACKEND=${{env.CACHE_BACKEND}}
-          CACHE_LOCATION=${{env.CACHE_LOCATION}}
-          CACHE_OPTIONS_CLIENT=${{env.CACHE_OPTIONS_CLIENT}}
-          CELERY_BROKER_URL=${{env.CELERY_BROKER_URL}}
-          CELERY_RESULT_BACKEND=${{env.CELERY_RESULT_BACKEND}}
-          ALLOWED_HOSTS=${{env.ALLOWED_HOSTS}}
+          SECRET_KEY:${{env.SECRET_KEY}}
+          DEBUG:${{env.DEBUG}}
+          CORS_ALLOWED_ORIGINS:${{env.CORS_ALLOWED_ORIGINS}}
+          CSRF_TRUSTED_ORIGINS:${{env.CSRF_TRUSTED_ORIGINS}}
+          DB_ENGINE:${{env.DB_ENGINE}}
+          DB_NAME:${{env.DB_NAME}}
+          DB_HOST:${{env.DB_HOST}}
+          DB_PASSWORD:${{env.DB_PASSWORD}}
+          DB_PORT:${{env.DB_PORT}}
+          DB_USER:${{env.DB_USER}}
+          CACHE_BACKEND:${{env.CACHE_BACKEND}}
+          CACHE_LOCATION:${{env.CACHE_LOCATION}}
+          CACHE_OPTIONS_CLIENT:${{env.CACHE_OPTIONS_CLIENT}}
+          CELERY_BROKER_URL:${{env.CELERY_BROKER_URL}}
+          CELERY_RESULT_BACKEND:${{env.CELERY_RESULT_BACKEND}}
+          ALLOWED_HOSTS:${{env.ALLOWED_HOSTS}}
         run: docker-compose -f docker-compose.staging.yml up -d
       - name: Test
         run: python manage.py test
