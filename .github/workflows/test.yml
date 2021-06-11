@@ -16,8 +16,12 @@ jobs:
         architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Check env variables
+      run: |
+        echo ${{env.DB_NAME}}
+        echo ${{env.DEBUG}}
     - name: Build Containers
-      run: docker-compose -f docker-compose.staging.yml up
+      run: docker-compose -f docker-compose.staging.yml up -d
     - name: Test
       run: python manage.py test
 
