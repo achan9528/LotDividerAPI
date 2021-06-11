@@ -46,6 +46,7 @@ jobs:
         env:
           DB_ENGINE: 'django.db.backends.sqlite3'
           DB_NAME: 'LotDividerTestDB'
+          CACHE_LOCATION: "redis://127.0.0.1:6379/1"
 
   build:
     name: Build and push to docker hub
