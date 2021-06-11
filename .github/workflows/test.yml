@@ -31,8 +31,6 @@ jobs:
         with:
           python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
           architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check env variables
@@ -41,6 +39,8 @@ jobs:
           echo ${{secrets.DEBUG}}
       - name: Build Containers
         run: docker-compose -f docker-compose.staging.yml up -d
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
       - name: Test
         run: python manage.py test
 
