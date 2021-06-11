@@ -400,9 +400,9 @@ class HoldingTestCase(test.APITestCase):
         )
 
         apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
@@ -501,9 +501,9 @@ class TaxLotTestCase(test.APITestCase):
         )
 
         apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
@@ -609,9 +609,9 @@ class ProposalTestCase(test.APITestCase):
         )
 
         cls.s2 = apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
@@ -755,9 +755,9 @@ class DraftPortfolioTestCase(test.APITestCase):
         )
 
         cls.s2 = apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
@@ -879,9 +879,9 @@ class DraftAccountTestCase(test.APITestCase):
         )
 
         cls.s2 = apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
@@ -1008,9 +1008,9 @@ class DraftHoldingTestCase(test.APITestCase):
         )
 
         cls.s2 = apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
@@ -1154,9 +1154,9 @@ class DraftTaxLotTestCase(test.APITestCase):
         )
 
         cls.s2 = apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
@@ -1312,9 +1312,9 @@ class SerializerTestCase(test.APITestCase):
         )
 
         cls.s2 = apiModels.Security.objects.create(
-            ticker='VBINX',
-            cusip='VBINX',
-            name='VBINX',
+            ticker='FB',
+            cusip='FB',
+            name='FB',
             productType=apiModels.ProductType.objects.get(name='mutual fund'),
         )
 
