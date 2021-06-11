@@ -43,6 +43,13 @@ jobs:
         run: pip install -r requirements.txt
       - name: Test
         run: python manage.py test
+        env:
+          DB_ENGINE: ''
+          DB_NAME: ''
+          DB_HOST: ''
+          DB_PASSWORD: ''
+          DB_PORT: ''
+          DB_USER: ''
 
   build:
     name: Build and push to docker hub
