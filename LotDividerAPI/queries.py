@@ -27,5 +27,6 @@ def deleteClosingPrices():
 
 def getClosingPrice(ticker):
     r = redis.Redis(host=os.environ.get('CACHE_HOST'), port=os.environ.get('CACHE_PORT'), db=0)
-    print(r.hget('closingPrices', ticker))
+    if r.hget('closingPrices', ticker) == None:
+        getClosingPrices()
     return (float(r.hget('closingPrices', ticker).decode('utf-8')))
