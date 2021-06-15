@@ -20,7 +20,7 @@ class TestView(APIView):
 
     def get(self, request, format=None):
         content = {
-            'welcome': 'hello!'
+            'welcome': 'hello there!'
         }
         return Response(content)
 
