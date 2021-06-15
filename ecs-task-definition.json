@@ -149,13 +149,10 @@
             "memory": 128,
             "portMappings": [
                 {
-                    "containerPort": 3000,
-                    "hostPort": 80,
+                    "containerPort": 80,
+                    "hostPort": 8080,
                     "protocol": "tcp"
                 }
-            ],
-            "command": [
-                "npm start"
             ],
             "essential": true,
             "mountPoints": [],
