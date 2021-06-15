@@ -118,7 +118,12 @@
                     "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_NAME::"
                 }
             ],
-            "mountPoints": [],
+            "mountPoints": [
+                {
+                    "sourceVolume": "dbVolume",
+                    "containerPath": "/var/lib/postgresql/data"
+                }
+            ],
             "volumesFrom": []
         },
         {
@@ -139,7 +144,7 @@
         },
         {
             "name": "frontend",
-            "image": "achan/9528/lot-divider-client:latest",
+            "image": "achan9528/lot-divider-client:latest",
             "cpu": 0,
             "memory": 128,
             "portMappings": [
@@ -163,8 +168,12 @@
         {
             "name": "dbVolume",
             "dockerVolumeConfiguration": {
-                "scope": "task",
-                "driver": "local"
+                "scope": "shared",
+                "autoprovision": true,
+                "driver": "local",
+                "labels": {
+                    "database": "LotDividerDB"
+                }
             }
         }
     ],
