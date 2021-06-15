@@ -74,13 +74,10 @@ jobs:
       #     container-name: backend
       #     image: achan9528/lot-divider-api:latest
 
-      # - name: Deploy Amazon ECS task definition
-      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      #   with:
-      #     task-definition: ecs-task-definition.json
-      #     cluster: LotDivider
-      #     service: test-service
-      #     wait-for-service-stability: true
-
       - name: Deploy Amazon ECS task definition
-        run: echo triggered
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ecs-task-definition.json
+          cluster: LotDivider
+          service: test-service
+          wait-for-service-stability: true
