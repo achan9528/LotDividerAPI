@@ -86,6 +86,14 @@
                 {
                     "name": "DB_PASSWORD",
                     "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_PASSWORD::"
+                },
+                {
+                    "name": "CACHE_HOST",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_HOST::"
+                },
+                {
+                    "name": "CACHE_PORT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_PORT::"
                 }
             ],
             "mountPoints": [],
