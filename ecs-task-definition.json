@@ -8,7 +8,11 @@
             "cpu": 0,
             "memory": 128,
             "logConfiguration": {
-                "logDriver": "awslogs"
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-LotDividerAPI-backend",
+                    "awslogs-region": "us-east-2"
+                }
             },
             "portMappings": [
                 {
@@ -108,7 +112,11 @@
             "cpu": 0,
             "memory": 128,
             "logConfiguration": {
-                "logDriver": "awslogs"
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-LotDividerAPI-db",
+                    "awslogs-region": "us-east-2"
+                }
             },
             "portMappings": [
                 {
@@ -146,7 +154,11 @@
             "cpu": 0,
             "memory": 128,
             "logConfiguration": {
-                "logDriver": "awslogs"
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-LotDividerAPI-cache",
+                    "awslogs-region": "us-east-2"
+                }
             },
             "portMappings": [
                 {
