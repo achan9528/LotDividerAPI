@@ -149,22 +149,6 @@
             "essential": true,
             "mountPoints": [],
             "volumesFrom": []
-        },
-        {
-            "name": "frontend",
-            "image": "achan9528/lot-divider-client:latest",
-            "cpu": 0,
-            "memory": 128,
-            "portMappings": [
-                {
-                    "containerPort": 80,
-                    "hostPort": 80,
-                    "protocol": "tcp"
-                }
-            ],
-            "essential": true,
-            "mountPoints": [],
-            "volumesFrom": []
         }
     ],
     "family": "Lot_Divider",
