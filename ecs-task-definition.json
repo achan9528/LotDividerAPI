@@ -7,6 +7,14 @@
             "image": "achan9528/lot-divider-api:latest",
             "cpu": 0,
             "memory": 128,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-backend",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "awslogs-lot-divider-api"
+                }
+            },
             "portMappings": [
                 {
                     "containerPort": 8000,
@@ -104,6 +112,14 @@
             "image": "postgres:latest",
             "cpu": 0,
             "memory": 128,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-db",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "awslogs-lot-divider-api"
+                }
+            },
             "portMappings": [
                 {
                     "containerPort": 5432,
@@ -139,6 +155,14 @@
             "image": "redis:latest",
             "cpu": 0,
             "memory": 128,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-cache",
+                    "awslogs-region": "us-east-2",
+                    "awslogs-stream-prefix": "awslogs-lot-divider-api"
+                }
+            },
             "portMappings": [
                 {
                     "containerPort": 6379,
