@@ -104,7 +104,17 @@
                 }
             ],
             "mountPoints": [],
-            "volumesFrom": []
+            "volumesFrom": [],
+            "dependsOn": [
+                {
+                    "containerName": "db",
+                    "condition": "START"
+                },
+                {
+                    "containerName": "cache",
+                    "condition": "START"
+                }
+            ]
         },
         {
             "name": "db",
