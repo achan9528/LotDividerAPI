@@ -130,17 +130,24 @@ WSGI_APPLICATION = 'LotDivider.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'NAME': os.environ.get('DB_NAME', default='db.sqlite3'),
-        'ENGINE': os.environ.get('DB_ENGINE', default='django.db.backends.sqlite3'),
-        'USER': os.environ.get('DB_USER', default=''),
-        'PASSWORD': os.environ.get('DB_PASSWORD', default=''),
-        'HOST': os.environ.get('DB_HOST', default=''),
-        'PORT': os.environ.get('DB_PORT', default=''),
+if os.environ.get('DEBUG') == 0:
+    DATABASES = {
+        'default': {
+            'NAME': os.environ.get('DB_NAME'),
+            'ENGINE': os.environ.get('DB_ENGINE'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT'),
+        }
     }
-
-}
+else:
+    DATABASES = {
+        'default': {
+            'NAME': 'db.sqlite3',
+            'ENGINE': 'django.db.backends.sqlite3',
+        }
+    }
 
 CACHES = {
     'default':{

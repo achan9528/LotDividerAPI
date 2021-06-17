@@ -79,5 +79,5 @@ jobs:
         with:
           task-definition: ecs-task-definition.json
           cluster: LotDivider
-          service: test-service
+          service: lot-divider-api-service
           wait-for-service-stability: true
