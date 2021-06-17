@@ -37,6 +37,8 @@ services:
             - CELERY_BROKER_URL=${CELERY_BROKER_URL}
             - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
             - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+            - CACHE_HOST=${CACHE_HOST}
+            - CACHE_PORT=${CACHE_PORT}
         # volumes:
         #     - static_volume:/home/app/web/staticfiles
         #     - media_volume:/home/app/web/mediafiles
@@ -58,14 +60,14 @@ services:
             - POSTGRES_USER=${DB_USER}
         ports:
             - "5432:5432"
-    # cache:
-    #     image: redis
-    #     ports:
-    #         - "6379:6379"
-    #     volumes:
-    #         - /var/lib/lot-divider-api/cache:/data #staging and prod (assuming linux machine)
-    #     depends_on: 
-    #         - db
+    cache:
+        image: redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - /var/lib/lot-divider-api/cache:/data #staging and prod (assuming linux machine)
+        depends_on: 
+            - db
     # celery-worker:
     #     image: achan9528/lot-divider-api:latest
     #     command: celery -A LotDivider worker -l INFO
