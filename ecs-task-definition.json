@@ -182,7 +182,7 @@
             "volumesFrom": []
         }
     ],
-    "family": "Lot_Divider",
+    "family": "lot-divider-api",
     "revision": 16,
     "volumes": [
         {
