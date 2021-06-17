@@ -215,5 +215,5 @@
         "EC2"
     ],
     "registeredAt": "2021-06-08T21:28:17.328000-07:00",
-    "registeredBy": "arn:aws:iam::791710216892:root"
+    "registeredBy": "arn:aws:iam::791710216892:user/achan"
 }
