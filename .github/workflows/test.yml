@@ -69,6 +69,6 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: achan9528/lot-divider-api:${{ github.sha }}
+            tags: achan9528/lot-divider-api:latest
         - name: Image digest
           run: echo ${{ steps.docker_build.outputs.digest }}
