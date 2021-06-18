@@ -6,7 +6,8 @@
             "name": "backend",
             "image": "achan9528/lot-divider-api:latest",
             "cpu": 0,
-            "memory": 1280,
+            "memory": 300,
+            "memoryReservation": 128,
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -120,7 +121,8 @@
             "name": "db",
             "image": "postgres:latest",
             "cpu": 0,
-            "memory": 1280,
+            "memory": 300,
+            "memoryReservation": 128,
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
@@ -162,7 +164,8 @@
             "name": "cache",
             "image": "redis:latest",
             "cpu": 0,
-            "memory": 1280,
+            "memory": 300,
+            "memoryReservation": 128,
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
