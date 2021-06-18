@@ -50,7 +50,7 @@ class ProductType(models.Model):
 class Security(models.Model):
     ticker = models.CharField(max_length=50, unique=True)
     cusip = models.CharField(max_length=50, unique=True)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.TextField()
     number = models.CharField(max_length=50, default=uuid.uuid4)
     productType = models.ForeignKey(ProductType, related_name="relatedSecurities", on_delete=models.CASCADE)
     createdAt = models.DateTimeField(auto_now_add=True)

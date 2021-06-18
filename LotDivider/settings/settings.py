@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sites', # django-rest-auth registration
     'allauth', # django-rest-auth registration
     'allauth.account', # django-rest-auth registration
+    'allauth.socialaccount', # django-rest-auth registration
     'rest_auth.registration', # django-rest-auth registration
     'LotDividerAPI.apps.LotdividerapiConfig', # configuration file
     'celery',
@@ -129,25 +130,16 @@ WSGI_APPLICATION = 'LotDivider.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-if os.environ.get('DEBUG') == 0:
-    DATABASES = {
-        'default': {
-            'NAME': os.environ.get('DB_NAME'),
-            'ENGINE': os.environ.get('DB_ENGINE'),
-            'USER': os.environ.get('DB_USER'),
-            'PASSWORD': os.environ.get('DB_PASSWORD'),
-            'HOST': os.environ.get('DB_HOST'),
-            'PORT': os.environ.get('DB_PORT'),
-        }
+DATABASES = {
+    'default': {
+        'NAME': os.environ.get('DB_NAME'),
+        'ENGINE': os.environ.get('DB_ENGINE'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'NAME': 'db.sqlite3',
-            'ENGINE': 'django.db.backends.sqlite3',
-        }
-    }
+}
 
 CACHES = {
     'default':{
