@@ -24,8 +24,10 @@ def deleteClosingPrices():
         r.hdel('closingPrices', ticker)
     print('Deleted Closing Prices')
 
-def getClosingPrice(ticker):
+def getClosingPrice(ticker, closingDate=date.today().strftime("%Y-%m-%d")):
     r = redis.Redis(host=os.environ.get('CACHE_HOST'), port=os.environ.get('CACHE_PORT'), db=0)
-    if r.hget('closingPrices', ticker) == None:
-        getClosingPrices()
+    if r.hget('closingPrices', ticker)==None:
+        closingPrice = yf.download(ticker, closingDate)['Adj Close'][0]
+        r.hset('closingPrices', ticker, closingPrice)
+        return float(closingPrice)
     return (float(r.hget('closingPrices', ticker).decode('utf-8')))
