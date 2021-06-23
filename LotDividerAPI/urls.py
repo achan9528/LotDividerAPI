@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, re_path, include
 from LotDividerAPI import views
 from rest_framework import routers
 
@@ -21,5 +21,6 @@ urlpatterns = [
     path('api/rest-auth/', include('rest_auth.urls')),
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/draft-taxlots/batch/', views.DraftTaxLotBatchUpdate.as_view()),
+    re_path(r'^api/proposals/(?P<proposalID>[0-9]{1,})/download/$', views.DownloadProposal.as_view()),
     path('api/', include(router.urls)),
 ]

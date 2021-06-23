@@ -10,6 +10,8 @@ from rest_auth.registration import views as restAuthViews
 from LotDividerAPI import models as apiModels
 from decimal import Decimal
 from rest_framework.exceptions import ValidationError
+from rest_pandas.views import PandasSimpleView 
+from rest_pandas.renderers import PandasExcelRenderer
 
 # Login and Registration views are through the django-rest-auth
 # library (see github)
@@ -187,3 +189,19 @@ class DraftTaxLotBatchUpdate(APIView):
         serializer = read_serializers.DraftTaxLotSerializer(instances, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class DownloadProposal(PandasSimpleView):
+    renderer_classes = [PandasExcelRenderer]
+
+    def update_pandas_headers(self, response):
+        headers = self.get_pandas_headers(self.request)
+        for key, val in headers.items():
+            response[key] = val
+        return response
+
+    def get_pandas_filename(self, request, format):
+        return request.query_params.get('fileName')
+
+    def get_data(self,request,*args,**kwargs):
+        print(request)
+        print(kwargs)
+        return services.exportProposal(kwargs.get('proposalID'),**request.query_params)

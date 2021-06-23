@@ -1,7 +1,7 @@
 from .models import *
 from decimal import Decimal
 from collections import deque
-from django.db.models import F, ExpressionWrapper, DecimalField, When, Case
+from django.db.models import F, ExpressionWrapper, DecimalField, When, Case, Value
 import pandas as pd
 from .queries import *
 from datetime import date
@@ -372,3 +372,29 @@ def getLots(targetShares, holding, method="HIFO"):
         "usedLots": returnLots,
         "remainingLots": currentLots
     }
+
+def exportProposal(proposalID, fileFormat, fileName, **kwargs):
+    # convert the proposal to a list
+    # pass the list into a dataframe object
+    # return the df
+    draftTaxLots = DraftTaxLot.objects.filter(draftHolding__draftAccount__draftPortfolio__proposal__id=proposalID).values(
+        'draftHolding__draftAccount',
+        'referencedLot',
+        'units',
+        'createdAt',
+        'updatedAt'
+    )
+    df = pd.DataFrame(list(draftTaxLots))
+    df.rename(columns={
+        'draftHolding__draftAccount': 'Draft Account',
+        'referencedLot': 'Referenced Lot',
+        'units': 'Units',
+        'createdAt': 'Created At',
+        'updatedAt': 'Updated At',
+    }, inplace=True)
+    print(list(df.columns))
+    print(df)
+    df['Created At'] = df['Created At'].apply(lambda x: pd.to_datetime(x).date())
+    df['Updated At'] = df['Updated At'].apply(lambda x: pd.to_datetime(x).date())
+    # df.to_excel("~/Downloads/ProposalResults.xlsx")
+    return df
