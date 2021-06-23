@@ -183,6 +183,224 @@
             "essential": true,
             "mountPoints": [],
             "volumesFrom": []
+        },
+        {
+            "name": "celery-worker",
+            "image": "achan9528/lot-divider-api:latest",
+            "cpu": 0,
+            "memory": 300,
+            "memoryReservation": 128,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-LotDividerAPI-backend",
+                    "awslogs-region": "us-east-2"
+                }
+            },
+            "portMappings": [],
+            "essential": true,
+            "entryPoint":[
+                "/bin/bash",
+                "-c"
+            ],
+            "command": [
+                "celery -A LotDivider worker --loglevel=INFO"
+            ],
+            "secrets": [
+                {
+                    "name": "CORS_ALLOWED_ORIGINS",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CORS_ALLOWED_ORIGINS::"
+                },
+                {
+                    "name": "CELERY_BROKER_URL",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CELERY_BROKER_URL::"
+                },
+                {
+                    "name": "DB_PORT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_PORT::"
+                },
+                {
+                    "name": "CACHE_OPTIONS_CLIENT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_OPTIONS_CLIENT::"
+                },
+                {
+                    "name": "DB_USER",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_USER::"
+                },
+                {
+                    "name": "CELERY_RESULT_BACKEND",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CELERY_RESULT_BACKEND::"
+                },
+                {
+                    "name": "SECRET_KEY",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:SECRET_KEY::"
+                },
+                {
+                    "name": "DB_NAME",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_NAME::"
+                },
+                {
+                    "name": "DB_HOST",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_HOST::"
+                },
+                {
+                    "name": "DEBUG",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DEBUG::"
+                },
+                {
+                    "name": "CACHE_BACKEND",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_BACKEND::"
+                },
+                {
+                    "name": "CACHE_LOCATION",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_LOCATION::"
+                },
+                {
+                    "name": "DB_ENGINE",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_ENGINE::"
+                },
+                {
+                    "name": "ALLOWED_HOSTS",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:ALLOWED_HOSTS::"
+                },
+                {
+                    "name": "CSRF_TRUSTED_ORIGINS",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CSRF_TRUSTED_ORIGINS::"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_PASSWORD::"
+                },
+                {
+                    "name": "CACHE_HOST",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_HOST::"
+                },
+                {
+                    "name": "CACHE_PORT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_PORT::"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "dependsOn": [
+                {
+                    "containerName": "db",
+                    "condition": "START"
+                },
+                {
+                    "containerName": "cache",
+                    "condition": "START"
+                }
+            ]
+        },
+        {
+            "name": "celery-worker",
+            "image": "achan9528/lot-divider-api:latest",
+            "cpu": 0,
+            "memory": 300,
+            "memoryReservation": 128,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "awslogs-LotDividerAPI-backend",
+                    "awslogs-region": "us-east-2"
+                }
+            },
+            "portMappings": [],
+            "essential": true,
+            "entryPoint":[
+                "/bin/bash",
+                "-c"
+            ],
+            "command": [
+                "celery -A LotDivider beat -l INFO"
+            ],
+            "secrets": [
+                {
+                    "name": "CORS_ALLOWED_ORIGINS",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CORS_ALLOWED_ORIGINS::"
+                },
+                {
+                    "name": "CELERY_BROKER_URL",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CELERY_BROKER_URL::"
+                },
+                {
+                    "name": "DB_PORT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_PORT::"
+                },
+                {
+                    "name": "CACHE_OPTIONS_CLIENT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_OPTIONS_CLIENT::"
+                },
+                {
+                    "name": "DB_USER",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_USER::"
+                },
+                {
+                    "name": "CELERY_RESULT_BACKEND",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CELERY_RESULT_BACKEND::"
+                },
+                {
+                    "name": "SECRET_KEY",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:SECRET_KEY::"
+                },
+                {
+                    "name": "DB_NAME",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_NAME::"
+                },
+                {
+                    "name": "DB_HOST",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_HOST::"
+                },
+                {
+                    "name": "DEBUG",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DEBUG::"
+                },
+                {
+                    "name": "CACHE_BACKEND",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_BACKEND::"
+                },
+                {
+                    "name": "CACHE_LOCATION",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_LOCATION::"
+                },
+                {
+                    "name": "DB_ENGINE",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_ENGINE::"
+                },
+                {
+                    "name": "ALLOWED_HOSTS",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:ALLOWED_HOSTS::"
+                },
+                {
+                    "name": "CSRF_TRUSTED_ORIGINS",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CSRF_TRUSTED_ORIGINS::"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:DB_PASSWORD::"
+                },
+                {
+                    "name": "CACHE_HOST",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_HOST::"
+                },
+                {
+                    "name": "CACHE_PORT",
+                    "valueFrom": "arn:aws:secretsmanager:us-east-2:791710216892:secret:production/appSecrets-VUA93u:CACHE_PORT::"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "dependsOn": [
+                {
+                    "containerName": "db",
+                    "condition": "START"
+                },
+                {
+                    "containerName": "cache",
+                    "condition": "START"
+                }
+            ]
         }
     ],
     "family": "lot-divider-api",

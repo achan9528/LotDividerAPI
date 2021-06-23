@@ -1,7 +1,7 @@
 import os
 from celery.schedules import crontab
 
-broker_url = os.environ.get('CELERY_BACKEND_URL')
+broker_url = os.environ.get('CELERY_BROKER_URL')
 result_backend = os.environ.get('CELERY_RESULT_BACKEND')
 
 # task_serializer = 'json'
@@ -17,6 +17,6 @@ beat_schedule = {
     },
     # 'download-closing-prices-test': {
     #     'task': 'LotDividerAPI.tasks.getClosingData',
-    #     'schedule': crontab(hour=4, minute=56, day_of_week=[6]),
+    #     'schedule': crontab(hour=21, minute=15, day_of_week=[3]),
     # },
 }
