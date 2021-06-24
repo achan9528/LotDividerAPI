@@ -294,7 +294,7 @@
             ]
         },
         {
-            "name": "celery-worker",
+            "name": "celery-beat",
             "image": "achan9528/lot-divider-api:latest",
             "cpu": 0,
             "memory": 300,
