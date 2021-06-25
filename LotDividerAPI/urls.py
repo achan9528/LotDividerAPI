@@ -22,5 +22,6 @@ urlpatterns = [
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/draft-taxlots/batch/', views.DraftTaxLotBatchUpdate.as_view()),
     re_path(r'^api/proposals/(?P<proposalID>[0-9]{1,})/download/$', views.DownloadProposal.as_view()),
+    path('api/get-user-info/', views.GetGenericUserInfo.as_view()),
     path('api/', include(router.urls)),
 ]

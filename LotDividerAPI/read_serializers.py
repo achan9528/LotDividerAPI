@@ -125,6 +125,8 @@ class PortfolioSerializer(serializers.ModelSerializer):
     class Meta:
         model = apiModels.Portfolio
         fields = [
+            'id',
+            'number',
             'name',
             'accounts',
         ]

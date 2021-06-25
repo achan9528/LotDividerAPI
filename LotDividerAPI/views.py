@@ -26,6 +26,18 @@ class TestView(APIView):
         }
         return Response(content)
 
+class GetGenericUserInfo(APIView):
+    renderer_classes = [JSONRenderer]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        print(user.name)
+        content = {
+            'username': user.name
+        }
+        return Response(content)
+
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
@@ -33,10 +45,27 @@ class ProjectViewSet(viewsets.ModelViewSet):
     renderer_classses = [JSONRenderer]
     parser_classes = [JSONParser]
     
+    def get_queryset(self):
+        if self.request.query_params.get('userSpecific'):
+            user = self.request.user
+            return apiModels.User.objects.get(id=user.id).projects.all()
+        return apiModels.Project.objects.all()
+
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return read_serializers.ProjectSerializer
         return serializers.ProjectSerializer
+
+    def create(self, request, *args, **kwargs):
+        print(self.request.user.id)
+        project_owners = request.data['owners']
+        project_owners.append(self.request.user.id)
+        request.data['owners'] = project_owners
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class ProductTypeViewSet(viewsets.ModelViewSet):
     queryset = apiModels.ProductType.objects.all()
