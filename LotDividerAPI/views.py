@@ -44,11 +44,20 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     renderer_classses = [JSONRenderer]
     parser_classes = [JSONParser]
+    # filterset_fields = ['id', 'name', 'proposals__accountUsed']
     
     def get_queryset(self):
         if self.request.query_params.get('userSpecific'):
             user = self.request.user
             return apiModels.User.objects.get(id=user.id).projects.all()
+        if len(self.request.query_params) > 0:
+            searchParams = {}
+            if self.request.query_params.get('id'):
+                searchParams['id'] = int(self.request.query_params.get('id'))
+            if self.request.query_params.get('accountUsed'):
+                searchParams['proposals__accountUsed'] = int(self.request.query_params.get('accountUsed'))                
+            print(searchParams)
+            return apiModels.Project.objects.filter(**searchParams)
         return apiModels.Project.objects.all()
 
     def get_serializer_class(self):

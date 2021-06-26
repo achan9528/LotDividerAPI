@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'LotDividerAPI.apps.LotdividerapiConfig', # configuration file
     'celery',
     'django_celery_results', #scheduled task manager and async worker
+    'django_filters', # filtering querysets
 ]
 
 SITE_ID = 1 # django-rest-auth registration
@@ -67,7 +68,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
