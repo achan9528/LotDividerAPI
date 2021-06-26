@@ -156,14 +156,12 @@ class ProjectTestCase(test.APITestCase):
         self.client.login(email='test@test.com', password='test1234')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data),1)
 
     def test_listProjectsDifferentUser(self):
         url = ('http://localhost:8000/api/projects/')
         self.client.login(email='test2@test.com', password='test5678')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data),1)
 
 class ProductTypeTestCase(test.APITestCase):
     @classmethod
@@ -274,7 +272,6 @@ class SecurityTestCase(test.APITestCase):
         url = "http://localhost:8000/api/securities/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.content)
 
     def test_getSecurity(self):
         url = "http://localhost:8000/api/securities/1/"
@@ -335,7 +332,6 @@ class PortfolioTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/portfolios/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0)
 
 class AccountTestCase(test.APITestCase):
     @classmethod
@@ -369,8 +365,7 @@ class AccountTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/accounts/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0)
-        print(response.data)
+        
 
 class HoldingTestCase(test.APITestCase):
     @classmethod
@@ -439,7 +434,6 @@ class HoldingTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/holdings/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(apiModels.Holding.objects.all()), 1)
 
     def test_patchHolding1(self):
         url = ('http://localhost:8000/api/holdings/1/')
@@ -697,7 +691,6 @@ class ProposalTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/proposals/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
         print(response.data)
 
     def test_patchProposal1(self):
@@ -824,7 +817,6 @@ class DraftPortfolioTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/draft-portfolios/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
 
     def test_patchDraftPortfolio1(self):
         url = ('http://localhost:8000/api/draft-portfolios/1/')
@@ -953,7 +945,6 @@ class DraftAccountTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/draft-accounts/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
 
     def test_patchDraftAccount1(self):
         url = ('http://localhost:8000/api/draft-accounts/1/')
@@ -1097,8 +1088,6 @@ class DraftHoldingTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/draft-holdings/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        print(response.data)
 
     def test_patchDraftHolding1(self):
         url = ('http://localhost:8000/api/draft-holdings/1/')
@@ -1256,8 +1245,6 @@ class DraftTaxLotTestCase(test.APITestCase):
         url = ('http://localhost:8000/api/draft-taxlots/')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        print(response.content)
 
     def test_patchDraftTaxLot1(self):
         url = ('http://localhost:8000/api/draft-taxlots/1/')
