@@ -192,7 +192,6 @@ class ProductTypeTestCase(test.APITestCase):
         url = 'http://localhost:8000/api/product-types/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
         print(response.content)
 
     def test_getProductType1(self):
