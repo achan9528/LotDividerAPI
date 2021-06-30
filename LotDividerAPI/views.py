@@ -52,10 +52,22 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return apiModels.User.objects.get(id=user.id).projects.all()
         if len(self.request.query_params) > 0:
             searchParams = {}
-            if self.request.query_params.get('id'):
-                searchParams['id'] = int(self.request.query_params.get('id'))
-            if self.request.query_params.get('accountUsed'):
-                searchParams['proposals__accountUsed'] = int(self.request.query_params.get('accountUsed'))                
+            if self.request.query_params.get('projectID'):
+                searchParams['id'] = int(self.request.query_params.get('projectID'))
+            if self.request.query_params.get('projectName'):
+                searchParams['name__icontains'] = self.request.query_params.get('projectName')
+            if self.request.query_params.get('proposalID'):
+                searchParams['proposals'] = int(self.request.query_params.get('proposalID'))
+            if self.request.query_params.get('proposalName'):
+                searchParams['proposals__name__icontains'] = self.request.query_params.get('proposalName')
+            if self.request.query_params.get('accountName'):
+                searchParams['proposals__accountUsed__name__icontains'] = self.request.query_params.get('accountName')                
+            if self.request.query_params.get('accountID'):
+                searchParams['proposals__accountUsed'] = int(self.request.query_params.get('accountID'))                
+            if self.request.query_params.get('portfolioName'):
+                searchParams['proposals__accountUsed__portfolio__name__icontains'] = self.request.query_params.get('portfolioName')                
+            if self.request.query_params.get('portfolioID'):
+                searchParams['proposals__accountUsed__portfolio'] = int(self.request.query_params.get('portfolioID'))                
             print(searchParams)
             return apiModels.Project.objects.filter(**searchParams)
         return apiModels.Project.objects.all()
@@ -112,6 +124,28 @@ class PortfolioViewSet(viewsets.ModelViewSet):
         serializer = read_serializers.PortfolioSerializer
         serializer = serializer(portfolio)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def get_queryset(self):
+        if len(self.request.query_params) > 0:
+            searchParams = {}
+            if self.request.query_params.get('projectID'):
+                searchParams['accounts__relatedProposals__project'] = int(self.request.query_params.get('projectID'))
+            if self.request.query_params.get('projectName'):
+                searchParams['accounts__relatedProposals__project__name__icontains'] = self.request.query_params.get('projectName')
+            if self.request.query_params.get('proposalID'):
+                searchParams['accounts__relatedProposals'] = int(self.request.query_params.get('proposalID'))
+            if self.request.query_params.get('proposalName'):
+                searchParams['accounts__relatedProposals__name__icontains'] = self.request.query_params.get('proposalName')
+            if self.request.query_params.get('accountName'):
+                searchParams['accounts__name'] = self.request.query_params.get('accountName')                
+            if self.request.query_params.get('accountID'):
+                searchParams['accounts'] = int(self.request.query_params.get('accountID'))                
+            if self.request.query_params.get('portfolioName'):
+                searchParams['name__icontains'] = self.request.query_params.get('portfolioName')                
+            if self.request.query_params.get('portfolioID'):
+                searchParams['id'] = int(self.request.query_params.get('portfolioID'))              
+            return apiModels.Portfolio.objects.filter(**searchParams)
+        return apiModels.Portfolio.objects.all()
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = apiModels.Account.objects.all()
@@ -151,6 +185,28 @@ class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProposalSerializer
     renderer_classses = [JSONRenderer]
     parser_classes = [JSONParser]
+
+    def get_queryset(self):
+        if len(self.request.query_params) > 0:
+            searchParams = {}
+            if self.request.query_params.get('projectID'):
+                searchParams['project'] = int(self.request.query_params.get('projectID'))
+            if self.request.query_params.get('projectName'):
+                searchParams['project__name__icontains'] = self.request.query_params.get('projectName')
+            if self.request.query_params.get('proposalID'):
+                searchParams['id'] = int(self.request.query_params.get('proposalID'))
+            if self.request.query_params.get('proposalName'):
+                searchParams['name__iconains'] = self.request.query_params.get('proposalName')
+            if self.request.query_params.get('accountName'):
+                searchParams['accountUsed__name__icontains'] = self.request.query_params.get('accountName')                
+            if self.request.query_params.get('accountID'):
+                searchParams['accountUsed'] = int(self.request.query_params.get('accountID'))                
+            if self.request.query_params.get('portfolioName'):
+                searchParams['accountUsed__portfolio__name__icontains'] = self.request.query_params.get('portfolioName')                
+            if self.request.query_params.get('portfolioID'):
+                searchParams['accountUsed__portfolio'] = int(self.request.query_params.get('portfolioID'))                
+            return apiModels.Proposal.objects.filter(**searchParams)
+        return apiModels.Proposal.objects.all()
 
     def get_serializer_class(self):
         print(self.request.data)
